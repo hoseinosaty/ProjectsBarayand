@@ -37,7 +37,7 @@ namespace Barayand.DAL.Repositories
             }
             catch (Exception ex)
             {
-
+                
             }
         }
 
@@ -78,7 +78,7 @@ namespace Barayand.DAL.Repositories
             }
             catch (Exception ex)
             {
-
+                
             }
         }
 
@@ -90,7 +90,7 @@ namespace Barayand.DAL.Repositories
             }
             catch (Exception ex)
             {
-                return null;
+                return ResponseModel.ServerInternalError(data: ex);
             }
         }
 
@@ -122,7 +122,7 @@ namespace Barayand.DAL.Repositories
             }
             catch (Exception ex)
             {
-                return null;
+                return ResponseModel.ServerInternalError(data: ex);
             }
         }
 
@@ -136,7 +136,7 @@ namespace Barayand.DAL.Repositories
             }
             catch (Exception ex)
             {
-                return null;
+                return ResponseModel.ServerInternalError(data: ex);
             }
         }
 

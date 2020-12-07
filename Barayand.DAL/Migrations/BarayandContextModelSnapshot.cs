@@ -1168,6 +1168,60 @@ namespace Barayand.DAL.Migrations
                     b.ToTable("ProductCategory");
                 });
 
+            modelBuilder.Entity("Barayand.Models.Entity.ProductCombineModel", b =>
+                {
+                    b.Property<int>("X_Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime?>("Created_At")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("Deleted_At")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("Updated_At")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("X_AvailableCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("X_ColorId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("X_Default")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("X_Discount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("X_DiscountType")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("X_IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("X_Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("X_ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("X_Sort")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("X_Status")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("X_WarrantyId")
+                        .HasColumnType("int");
+
+                    b.HasKey("X_Id");
+
+                    b.ToTable("ProductCombine");
+                });
+
             modelBuilder.Entity("Barayand.Models.Entity.ProductLabelModel", b =>
                 {
                     b.Property<int>("L_Id")
@@ -1267,6 +1321,9 @@ namespace Barayand.DAL.Migrations
 
                     b.Property<int>("P_AvailableCount")
                         .HasColumnType("int");
+
+                    b.Property<bool>("P_BestOffer")
+                        .HasColumnType("bit");
 
                     b.Property<int>("P_BinPrice")
                         .HasColumnType("int");

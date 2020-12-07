@@ -5,6 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 using Barayand.Models.Extra;
+using Barayand.Models.KeyValueModel;
+
 namespace Barayand.Models.Entity
 {
     public class ProductModel:BaseModel
@@ -39,7 +41,9 @@ namespace Barayand.Models.Entity
         public string P_TechnicalInfo { get; set; }
         public string P_Manuals { get; set; }//دفترچه راهنما
         public bool P_IsDeleted { get; set; } = false;
-        
+        public bool P_BestOffer { get; set; } = false; //بهترین فرصت
+
+
         /**********************HomeKito useless fields (فیلد های بی کاربرد در هومکیتو)**********************/
         public int P_AvailableCount { get; set; } = 0;
         public int P_SaleCount { get; set; } = 0;
@@ -104,6 +108,14 @@ namespace Barayand.Models.Entity
         public int Rate { get; set; } = 0;
         [NotMapped]
         public dynamic PriceModel { get; set; }
+        [NotMapped]
+        public bool IsAvailable { get; set; } = false;
+        [NotMapped]
+        public List<Warranty> Warranties { get; set; } = new List<Warranty>();
+        [NotMapped]
+        public List<Color> Colors { get; set; } = new List<Color>();
+        [NotMapped]
+        public ProductCombineModel DefaultProductCombine { get; set; } = null;
         [NotMapped]
         public bool AllowDownload { get; set; } = false;
         public decimal FinalPrice(decimal couponDiscount = 0,decimal shippingCos = 0,decimal price = 0,bool onlyPercentag = false)

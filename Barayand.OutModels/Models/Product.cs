@@ -32,6 +32,7 @@ namespace Barayand.OutModels.Models
         public string P_TechnicalInfo { get; set; }
         public string P_Manuals { get; set; }//دفترچه راهنما
         public bool P_IsDeleted { get; set; } = false;
+        public bool P_BestOffer { get; set; } = false; //بهترین فرصت
 
         /**********************HomeKito useless fields (فیلد های بی کاربرد در هومکیتو)**********************/
         public int P_AvailableCount { get; set; } = 0;

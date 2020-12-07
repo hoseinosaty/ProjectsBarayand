@@ -58,12 +58,11 @@ namespace Barayand.DAL.Context
         public DbSet<PermissionModel> Permissions { get; set; }
         public DbSet<OptionsModel> Options { get; set; }
         public DbSet<TicketModel> Ticket { get; set; }
-
-        //Repository dont created
         public DbSet<ServiceModel> Services { get; set; }//combined with profits(مزیت)  
         public DbSet<EnergyUsageModel> EnergyUsage { get; set; }//combined with BoxGiftWrapper(کادوپیچ)
         public DbSet<ManufacturContryModel> ManufacturingCuntry { get; set; }
-        //
+        public DbSet<ProductCombineModel> ProductCombine { get; set; }//combine warranty and color (ترکیب گارانتی و رنگ - جدول قیمت محصول)
+        
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

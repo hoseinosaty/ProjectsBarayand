@@ -48,6 +48,16 @@ namespace Barayand.OutModels.Miscellaneous
             public int E_Id { get; set; }
             public string E_Title { get; set; }
         }
+        public class Warranty
+        {
+            public int W_Id { get; set; }
+            public string W_Title { get; set; }
+        }
+        public class Color
+        {
+            public int C_Id { get; set; }
+            public string C_Title { get; set; }
+        }
     }
     
 }

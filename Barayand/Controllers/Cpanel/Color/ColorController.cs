@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Barayand.OutModels.Response;
 using Barayand.OutModels.Models;
+using Barayand.OutModels.Miscellaneous;
 
 namespace Barayand.Controllers.Cpanel.Color
 {
@@ -114,6 +115,21 @@ namespace Barayand.Controllers.Cpanel.Color
             {
                 List<ColorModel> data = (List<ColorModel>)(await this._repository.GetAll()).Data;
                 List<OutModels.Models.Color> result = _mapper.Map<List<ColorModel>, List<OutModels.Models.Color>>(data);
+                return new JsonResult(ResponseModel.Success("COLOR_LIST_RETURNED", result));
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        [Route("LoadColorsCombo")]
+        [HttpPost]
+        public async Task<ActionResult> GetAllColorsCombo()
+        {
+            try
+            {
+                List<ColorModel> data = (List<ColorModel>)(await this._repository.GetAll()).Data;
+                List<ComboItems.Color> result = _mapper.Map<List<ColorModel>, List<ComboItems.Color>>(data);
                 return new JsonResult(ResponseModel.Success("COLOR_LIST_RETURNED", result));
             }
             catch (Exception ex)

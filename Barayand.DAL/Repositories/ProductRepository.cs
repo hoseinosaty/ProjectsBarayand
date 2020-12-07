@@ -176,6 +176,10 @@ namespace Barayand.DAL.Repositories
                 List<BrandModel> AllBrands = this._context.Brands.ToList();
                 List<ProductLabelRelationModel> AllLabels = this._context.ProductLabelRelation.ToList();
                 List<ProductLabelModel> AllLabelTable = this._context.ProductLabel.ToList();
+                List<ProductCombineModel> AllCombines = this._context.ProductCombine.Where(x=>!x.X_IsDeleted).ToList();
+                List<ColorModel> AllColors = this._context.Color.Where(x=>!x.C_IsDeleted).ToList();
+                List<WarrantyModel> AllWarranties = this._context.Warranty.Where(x=>!x.W_IsDeleted).ToList();
+
                 foreach(var item in AllProducts)
                 {
                     string cattitle = "";
@@ -221,6 +225,42 @@ namespace Barayand.DAL.Repositories
                     }
                     item.P_DedicatedField = JsonConvert.SerializeObject(dedicated);
                     AllProducts.FirstOrDefault(x => x.P_Id == item.P_Id).P_ParentCategories = await this._pCRepository.GetCategoryParents(item.P_EndLevelCatId);
+
+                    var ProductCombines = AllCombines.Where(x=>x.X_ProductId == item.P_Id).ToList();
+                    if(ProductCombines != null && ProductCombines.Count > 0)
+                    {
+                        List<Models.KeyValueModel.Warranty> warranties = new List<Models.KeyValueModel.Warranty>();
+                        List<Models.KeyValueModel.Color> colors = new List<Models.KeyValueModel.Color>();
+                        int AvlCount = 0;
+                        foreach(var combine in ProductCombines)
+                        {
+                            if(combine.X_AvailableCount > 1)
+                            {
+                                var w = AllWarranties.FirstOrDefault(x => x.W_Id == combine.X_WarrantyId);
+                                if (w != null)
+                                {
+                                    warranties.Add(new Models.KeyValueModel.Warranty() { Id = w.W_Id, Title = w.W_Title });
+                                }
+                                var c = AllColors.FirstOrDefault(x => x.C_Id == combine.X_ColorId);
+                                if (c != null)
+                                {
+                                    colors.Add(new Models.KeyValueModel.Color() { Id = c.C_Id, ColorCode = c.C_HexColor });
+                                }
+                            }
+                            AvlCount += combine.X_AvailableCount;
+                            if(combine.X_Default)
+                            {
+                                item.DefaultProductCombine = combine;
+                            }
+                        }
+                        if(AvlCount > 0)
+                        {
+                            item.Warranties = warranties;
+                            item.Colors = colors;
+                            item.IsAvailable = true;
+                        }
+                    }
+
                 }
                 return ResponseModel.Success(data:AllProducts);
             }

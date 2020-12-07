@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Barayand.OutModels.Response;
 using Barayand.OutModels.Models;
+using Barayand.OutModels.Miscellaneous;
 
 namespace Barayand.Controllers.BaseSetting
 {
@@ -114,6 +115,21 @@ namespace Barayand.Controllers.BaseSetting
             {
                 List<WarrantyModel> data = (List<WarrantyModel>)(await this._repository.GetAll()).Data;
                 List<OutModels.Models.Warranty> result = _mapper.Map<List<WarrantyModel>, List<OutModels.Models.Warranty>>(data);
+                return new JsonResult(ResponseModel.Success("WARRANTY_LIST_RETURNED", result));
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        [Route("LoadWarrantyCombo")]
+        [HttpPost]
+        public async Task<ActionResult> GetAllWarrantiesCombo()
+        {
+            try
+            {
+                List<WarrantyModel> data = (List<WarrantyModel>)(await this._repository.GetAll()).Data;
+                List<ComboItems.Warranty> result = _mapper.Map<List<WarrantyModel>, List<ComboItems.Warranty>>(data);
                 return new JsonResult(ResponseModel.Success("WARRANTY_LIST_RETURNED", result));
             }
             catch (Exception ex)
