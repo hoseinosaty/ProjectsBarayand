@@ -25,13 +25,17 @@ namespace Barayand.Controllers.Cpanel.Product
         private readonly IPublicMethodRepsoitory<WarrantyModel> _warrantyrepo;
         private readonly IPublicMethodRepsoitory<ColorModel> _colorrepo;
         private readonly IPRRepository _productrelationrepo;
-        public ProductController(IMapper mapper, IPublicMethodRepsoitory<ProductModel> repository, IPRRepository productrelationrepo, IPublicMethodRepsoitory<ProductCombineModel> combinerepo, IPublicMethodRepsoitory<WarrantyModel> warrantyrepo, IPublicMethodRepsoitory<ColorModel> colorrepo)
+        private readonly IPerfectProductRepository _productperfectrepo;
+        private readonly ISetProductRepository _productsetrepo;
+        public ProductController(IMapper mapper, IPublicMethodRepsoitory<ProductModel> repository, IPRRepository productrelationrepo, IPublicMethodRepsoitory<ProductCombineModel> combinerepo, IPublicMethodRepsoitory<WarrantyModel> warrantyrepo, IPublicMethodRepsoitory<ColorModel> colorrepo, IPerfectProductRepository perfectProduct, ISetProductRepository productsetrepo)
         {
             this._repository = repository;
             this._productrelationrepo = productrelationrepo;
             this._combinerepository = combinerepo;
             this._warrantyrepo = warrantyrepo;
             this._colorrepo = colorrepo;
+            this._productperfectrepo = perfectProduct;
+            _productsetrepo = productsetrepo;
             this._mapper = mapper;
         }
         [Route("AddProduct")]
@@ -146,6 +150,7 @@ namespace Barayand.Controllers.Cpanel.Product
             try
             {
                 List<ProductModel> data = (List<ProductModel>)(await this._repository.GetAll()).Data;
+                List<ProductCombineModel> AllCombines = ((List<ProductCombineModel>)(await this._combinerepository.GetAll()).Data).Where(x=>!x.X_IsDeleted).ToList();
                 List<OutModels.Models.Product> result = _mapper.Map<List<ProductModel>, List<OutModels.Models.Product>>(data.Where(x => x.P_Id != pid).ToList());
                 
                 if(title != null)
@@ -156,8 +161,40 @@ namespace Barayand.Controllers.Cpanel.Product
                 {
                     result = result.Where(x => x.P_Code.Contains(code, StringComparison.InvariantCultureIgnoreCase)).ToList();
                 }
-
-                return new JsonResult(ResponseModel.Success("PRODUCTS_LIST_RETURNED", new {Products = result }));
+                
+                List<object> Prods = new List<object>();
+                foreach(var item in result)
+                {
+                    var ProdCombines = AllCombines.Where(x => x.X_ProductId == item.P_Id).ToList();
+                    if(ProdCombines.Count > 0)
+                    {
+                        int i = 1;
+                        foreach (var combine in ProdCombines)
+                        {
+                            var w = await _warrantyrepo.GetById(combine.X_WarrantyId);
+                            var c = await _colorrepo.GetById(combine.X_ColorId);
+                            if(w != null && c != null)
+                            {
+                                Prods.Add(new {
+                                    counter = i,
+                                    id = item.P_Id,
+                                    code = item.P_Code,
+                                    title = item.P_Title,
+                                    warranty = w.W_Title,
+                                    wid = w.W_Id,
+                                    cid = c.C_Id,
+                                    color = c.C_Title,
+                                    price = combine.X_Price.ToString("#,#"),
+                                    discount = combine.X_Discount.ToString("#,#") + (combine.X_DiscountType == 1 ? " %":"")
+                                });
+                                i++;
+                            }
+                        }
+                    }
+                }
+                int totalPages = (int)Math.Ceiling((double)Prods.Count() / count);
+                Prods = Prods.Skip(count * (page - 1)).Take(count).ToList();
+                return new JsonResult(ResponseModel.Success("PRODUCTS_LIST_RETURNED", new {Products = Prods, TotalPages = totalPages,CurrentPage = page}));
             }
             catch (Exception ex)
             {
@@ -167,7 +204,7 @@ namespace Barayand.Controllers.Cpanel.Product
         ////////
         [Route("AddProductRelation")]
         [HttpPost]
-        public async Task<ActionResult> AddProductRelation(Miscellaneous data)
+        public async Task<ActionResult> AddProductRelation(List<RelatedProductModel> data)
         {
             try
             {
@@ -185,6 +222,60 @@ namespace Barayand.Controllers.Cpanel.Product
             try
             {
                 return new JsonResult(await _productrelationrepo.GetAllRelation(data));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(ResponseModel.ServerInternalError(data: ex));
+            }
+        }
+
+        [Route("AddProductPefrect")]
+        [HttpPost]
+        public async Task<ActionResult> AddProductPefrect(List<PerfectProductModel> data)
+        {
+            try
+            {
+                return new JsonResult(await _productperfectrepo.UpdateRelation(data));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(ResponseModel.ServerInternalError(data: ex));
+            }
+        }
+        [Route("GetProductPerfect")]
+        [HttpPost]
+        public async Task<ActionResult> GetProductPerfect(Miscellaneous data)
+        {
+            try
+            {
+                return new JsonResult(await _productperfectrepo.GetAllRelation(data));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(ResponseModel.ServerInternalError(data: ex));
+            }
+        }
+
+        [Route("AddProductSet")]
+        [HttpPost]
+        public async Task<ActionResult> AddProductSet(List<SetProductsModel> data)
+        {
+            try
+            {
+                return new JsonResult(await _productsetrepo.UpdateRelation(data));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(ResponseModel.ServerInternalError(data: ex));
+            }
+        }
+        [Route("GetProductSet")]
+        [HttpPost]
+        public async Task<ActionResult> GetProductSet(Miscellaneous data)
+        {
+            try
+            {
+                return new JsonResult(await _productsetrepo.GetAllRelation(data));
             }
             catch (Exception ex)
             {

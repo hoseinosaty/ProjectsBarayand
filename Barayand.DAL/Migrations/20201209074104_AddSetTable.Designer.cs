@@ -4,14 +4,16 @@ using Barayand.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Barayand.DAL.Migrations
 {
     [DbContext(typeof(BarayandContext))]
-    partial class BarayandContextModelSnapshot : ModelSnapshot
+    [Migration("20201209074104_AddSetTable")]
+    partial class AddSetTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -567,39 +569,6 @@ namespace Barayand.DAL.Migrations
                     b.HasKey("GC_Id");
 
                     b.ToTable("GalleryCategory");
-                });
-
-            modelBuilder.Entity("Barayand.Models.Entity.GiftProductModel", b =>
-                {
-                    b.Property<int>("X_Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime?>("Created_At")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("Deleted_At")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("Updated_At")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("X_ColorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("X_MainProdId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("X_ProdId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("X_WarrantyId")
-                        .HasColumnType("int");
-
-                    b.HasKey("X_Id");
-
-                    b.ToTable("GiftProduct");
                 });
 
             modelBuilder.Entity("Barayand.Models.Entity.ImageGalleryModel", b =>

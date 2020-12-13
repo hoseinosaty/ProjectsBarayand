@@ -5,12 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
 namespace Barayand.DAL.Interfaces
 {
-    public interface IPRRepository
+    public interface IPerfectProductRepository
     {
-        Task<ResponseStructure> UpdateRelation(List<RelatedProductModel> data);
+        Task<ResponseStructure> UpdateRelation(List<PerfectProductModel> data);
         Task<ResponseStructure> GetAllRelation(Miscellaneous data);
     }
 }

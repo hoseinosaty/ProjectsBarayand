@@ -81,6 +81,9 @@ namespace Barayand
             services.AddScoped(typeof(IAttributeAnswerRepository),typeof(AttributeAnswerRepository));
             services.AddScoped(typeof(IPCRepository),typeof(PCRepository));
             services.AddScoped(typeof(IPRRepository),typeof(RelationProductRepository));
+            services.AddScoped(typeof(IPerfectProductRepository),typeof(PerfectProductRepository));
+            services.AddScoped(typeof(ISetProductRepository),typeof(SetProductRepository));
+            //services.AddScoped(typeof(IGiftProductRepository),typeof(SetProductRepository));
             services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
             services.AddScoped(typeof(IFormulaRepository), typeof(FormulaRepository));
             services.AddScoped(typeof(ICommentRepository), typeof(CommentRepository));

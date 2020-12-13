@@ -8,6 +8,5 @@ namespace Barayand.OutModels.Miscellaneous
     public class Miscellaneous
     {
         public int Id { get; set; } = 0;
-        public int[] ProductIds { get; set; } = new int[] { };//PRODUCT RELATION USED
     }
 }

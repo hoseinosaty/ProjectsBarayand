@@ -34,6 +34,9 @@ namespace Barayand.DAL.Context
         public DbSet<ProductModel> Product { get; set; }
         public DbSet<ProductLabelRelationModel> ProductLabelRelation { get; set; }
         public DbSet<ProductAttributeModel> ProductAttributeAnswer { get; set; }
+        public DbSet<GiftProductModel> GiftProduct { get; set; }
+        public DbSet<SetProductsModel> SetProduct { get; set; }
+        public DbSet<PerfectProductModel> PerfectProduct { get; set; }
         public DbSet<RelatedProductModel> RelatedProduct { get; set; }
         public DbSet<TrainingModel> Trainings { get; set; }
         public DbSet<TrainingSeasonsModel> TrainingSeasons { get; set; }

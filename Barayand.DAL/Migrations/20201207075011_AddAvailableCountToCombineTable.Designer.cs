@@ -4,14 +4,16 @@ using Barayand.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Barayand.DAL.Migrations
 {
     [DbContext(typeof(BarayandContext))]
-    partial class BarayandContextModelSnapshot : ModelSnapshot
+    [Migration("20201207075011_AddAvailableCountToCombineTable")]
+    partial class AddAvailableCountToCombineTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -569,39 +571,6 @@ namespace Barayand.DAL.Migrations
                     b.ToTable("GalleryCategory");
                 });
 
-            modelBuilder.Entity("Barayand.Models.Entity.GiftProductModel", b =>
-                {
-                    b.Property<int>("X_Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime?>("Created_At")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("Deleted_At")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("Updated_At")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("X_ColorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("X_MainProdId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("X_ProdId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("X_WarrantyId")
-                        .HasColumnType("int");
-
-                    b.HasKey("X_Id");
-
-                    b.ToTable("GiftProduct");
-                });
-
             modelBuilder.Entity("Barayand.Models.Entity.ImageGalleryModel", b =>
                 {
                     b.Property<int>("IG_Id")
@@ -1086,39 +1055,6 @@ namespace Barayand.DAL.Migrations
                     b.HasKey("O_Id");
 
                     b.ToTable("Order");
-                });
-
-            modelBuilder.Entity("Barayand.Models.Entity.PerfectProductModel", b =>
-                {
-                    b.Property<int>("X_Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime?>("Created_At")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("Deleted_At")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("Updated_At")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("X_ColorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("X_MainProdId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("X_ProdId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("X_WarrantyId")
-                        .HasColumnType("int");
-
-                    b.HasKey("X_Id");
-
-                    b.ToTable("PerfectProduct");
                 });
 
             modelBuilder.Entity("Barayand.Models.Entity.PermissionModel", b =>
@@ -1655,7 +1591,7 @@ namespace Barayand.DAL.Migrations
 
             modelBuilder.Entity("Barayand.Models.Entity.RelatedProductModel", b =>
                 {
-                    b.Property<int>("X_Id")
+                    b.Property<int>("PR_Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -1666,22 +1602,16 @@ namespace Barayand.DAL.Migrations
                     b.Property<DateTime?>("Deleted_At")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("PR_PId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PR_RId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("Updated_At")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("X_ColorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("X_MainProdId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("X_ProdId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("X_WarrantyId")
-                        .HasColumnType("int");
-
-                    b.HasKey("X_Id");
+                    b.HasKey("PR_Id");
 
                     b.ToTable("RelatedProduct");
                 });
@@ -1732,39 +1662,6 @@ namespace Barayand.DAL.Migrations
                     b.HasKey("S_Id");
 
                     b.ToTable("Services");
-                });
-
-            modelBuilder.Entity("Barayand.Models.Entity.SetProductsModel", b =>
-                {
-                    b.Property<int>("X_Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime?>("Created_At")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("Deleted_At")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("Updated_At")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("X_ColorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("X_MainProdId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("X_ProdId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("X_WarrantyId")
-                        .HasColumnType("int");
-
-                    b.HasKey("X_Id");
-
-                    b.ToTable("SetProduct");
                 });
 
             modelBuilder.Entity("Barayand.Models.Entity.SliderModel", b =>

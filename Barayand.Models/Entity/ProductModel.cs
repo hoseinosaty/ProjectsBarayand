@@ -117,6 +117,18 @@ namespace Barayand.Models.Entity
         [NotMapped]
         public ProductCombineModel DefaultProductCombine { get; set; } = null;
         [NotMapped]
+        public ManufacturContryModel Cuntry { get; set; } = new ManufacturContryModel();
+        [NotMapped]
+        public List<ProductModel> RelatedProducts { get; set; } = new List<ProductModel>();
+        [NotMapped]
+        public List<ProductModel> CompletelyProducts { get; set; } = new List<ProductModel>();
+        [NotMapped]
+        public List<ProductModel> SetProducts { get; set; } = new List<ProductModel>();
+        [NotMapped]
+        public ProductModel Gift { get; set; } = null;
+        [NotMapped]
+        public int VisitCount { get; set; } = 0;
+        [NotMapped]
         public bool AllowDownload { get; set; } = false;
         public decimal FinalPrice(decimal couponDiscount = 0,decimal shippingCos = 0,decimal price = 0,bool onlyPercentag = false)
         {

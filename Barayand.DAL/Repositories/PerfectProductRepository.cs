@@ -12,39 +12,39 @@ using System.Threading.Tasks;
 
 namespace Barayand.DAL.Repositories
 {
-    public class RelationProductRepository: GenericRepository<RelationProductRepository>,IPRRepository
+    public class PerfectProductRepository: GenericRepository<PerfectProductModel>, IPerfectProductRepository
     {
         private readonly BarayandContext _context;
-        public RelationProductRepository(BarayandContext context) : base(context)
+        public PerfectProductRepository(BarayandContext context) : base(context)
         {
             this._context = context;
         }
 
         public async Task<ResponseStructure> GetAllRelation(Miscellaneous data)
         {
-           try
+            try
             {
-                var allRelations = this._context.RelatedProduct.Where(x=>x.X_MainProdId == data.Id).ToList();
-                return ResponseModel.Success(data:allRelations);
+                var allRelations = this._context.PerfectProduct.Where(x => x.X_MainProdId == data.Id).ToList();
+                return ResponseModel.Success(data: allRelations);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return ResponseModel.ServerInternalError(data:ex);
+                return ResponseModel.ServerInternalError(data: ex);
             }
         }
 
-        public async Task<ResponseStructure> UpdateRelation(List<RelatedProductModel> data)
+        public async Task<ResponseStructure> UpdateRelation(List<PerfectProductModel> data)
         {
             try
             {
-                if(data == null || data.Count() < 1)
+                if (data == null || data.Count() < 1)
                 {
                     return ResponseModel.Error("Relation not found");
                 }
-                var rel = this._context.RelatedProduct.ToList();
-                this._context.RelatedProduct.RemoveRange(rel.Where(x=>x.X_MainProdId == data.FirstOrDefault().X_MainProdId).ToList());
+                var rel = this._context.PerfectProduct.ToList();
+                this._context.PerfectProduct.RemoveRange(rel.Where(x => x.X_MainProdId == data.FirstOrDefault().X_MainProdId).ToList());
                 await this.CommitAllChanges();
-                await this._context.RelatedProduct.AddRangeAsync(data);
+                await this._context.PerfectProduct.AddRangeAsync(data);
                 await this.CommitAllChanges();
                 return ResponseModel.Success("عملیات با موفقیت انجام گردید");
             }
