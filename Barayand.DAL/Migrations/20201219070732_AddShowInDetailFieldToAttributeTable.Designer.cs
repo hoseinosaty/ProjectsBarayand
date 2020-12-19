@@ -4,14 +4,16 @@ using Barayand.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Barayand.DAL.Migrations
 {
     [DbContext(typeof(BarayandContext))]
-    partial class BarayandContextModelSnapshot : ModelSnapshot
+    [Migration("20201219070732_AddShowInDetailFieldToAttributeTable")]
+    partial class AddShowInDetailFieldToAttributeTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -456,48 +458,6 @@ namespace Barayand.DAL.Migrations
                     b.HasKey("E_Id");
 
                     b.ToTable("EnergyUsage");
-                });
-
-            modelBuilder.Entity("Barayand.Models.Entity.ExpertReviewModel", b =>
-                {
-                    b.Property<int>("E_Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime?>("Created_At")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("Deleted_At")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("E_Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("E_Image")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("E_IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("E_ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("E_Sort")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("E_Status")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("E_Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("Updated_At")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("E_Id");
-
-                    b.ToTable("ExpertReview");
                 });
 
             modelBuilder.Entity("Barayand.Models.Entity.FavoriteModel", b =>

@@ -52,6 +52,10 @@ namespace Barayand.DAL.Repositories
             try
             {
                 var item = await this.GetById(entity.A_Id);
+                if(item == null)
+                {
+                    return ResponseModel.Error("صفت مورد نظر یافت نشد");
+                }
                 entity.Created_At = item.Created_At;
                 entity.Updated_At = DateTime.Now;
                 this._context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Detached;

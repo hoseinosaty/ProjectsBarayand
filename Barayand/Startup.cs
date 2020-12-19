@@ -72,6 +72,7 @@ namespace Barayand
                 mc.AddProfile(new Common.MapperProfiles.MCountryProfiler());
                 mc.AddProfile(new Common.MapperProfiles.EnergyGiftWrapProfiler());
                 mc.AddProfile(new Common.MapperProfiles.ProductCombineProfiler());
+                mc.AddProfile(new Common.MapperProfiles.ExpertReviewProfiler());
             });
             IMapper mapper = MapperConfiguration.CreateMapper();
             services.AddSingleton(mapper);
@@ -128,6 +129,7 @@ namespace Barayand
             services.AddScoped(typeof(IPublicMethodRepsoitory<ManufacturContryModel>), typeof(ManufacturCuntryRepsitory));
             services.AddScoped(typeof(IPublicMethodRepsoitory<EnergyUsageModel>), typeof(EnergyGiftWrapRepository));
             services.AddScoped(typeof(IPublicMethodRepsoitory<ProductCombineModel>), typeof(ProductCombineRepository));
+            services.AddScoped(typeof(IExpertReviewRepository), typeof(ExpertReviewRespository));
             //services.AddScoped<IGenericRepository<Barayand.Models.Entity.ColorModel>,
             //    ColorRepository>();
             //services.AddScoped<IGenericRepository<Barayand.Models.Entity.AttributeModel>,

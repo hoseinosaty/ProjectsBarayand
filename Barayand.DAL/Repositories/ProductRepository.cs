@@ -244,7 +244,7 @@ namespace Barayand.DAL.Repositories
                                 warranties.Add(new Models.KeyValueModel.Warranty() { Id = w.W_Id, Title = w.W_Title });
                             }
                             var c = AllColors.FirstOrDefault(x => x.C_Id == combine.X_ColorId);
-                            if (c != null)
+                            if (c != null && colors.Count(x => x.Id == c.C_Id) < 1)
                             {
                                 colors.Add(new Models.KeyValueModel.Color() { Id = c.C_Id, ColorCode = c.C_HexColor,Title = c.C_Title });
                             }
@@ -292,6 +292,36 @@ namespace Barayand.DAL.Repositories
                         AllProducts.SetProducts.Add(prod);
                     }
                 }
+                var attrs = _context.ProductAttributeAnswer.Where(x => x.X_PId == AllProducts.P_Id).ToList();
+                List<AttributeStructure> attributeStructures = new List<AttributeStructure>();
+                foreach (var attr in attrs)
+                {
+                    var attribute = _context.Attribute.FirstOrDefault(x => x.A_Id == attr.X_AId);
+                    var answer = "";
+                    if (attr.X_AnswerId == 0)
+                    {
+                        answer = attr.X_AnswerTitle;
+                    }
+                    else
+                    {
+                        var Ans = _context.AttributeAnswer.FirstOrDefault(x => x.X_Id == attr.X_AnswerId);
+                        if (Ans != null)
+                        {
+                            answer = Ans.X_Answer;
+                        }
+                    }
+                    if (attribute != null)
+                    {
+                        attributeStructures.Add(new AttributeStructure()
+                        {
+                            AnswerTitle = answer,
+                            AttributeTitle = attribute.A_Title
+                        });
+                    }
+                    
+                }
+                AllProducts.P_AttributeStructures = attributeStructures;
+                AllProducts.Comments  = _context.Comment.Where(x => x.C_EntityId == AllProducts.P_Id && x.C_Type == 1 && x.C_Status == 2).ToList();
                 return AllProducts;
             }
             catch (Exception ex)

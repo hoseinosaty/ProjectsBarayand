@@ -14,6 +14,8 @@ namespace Barayand.OutModels.Models
         public bool A_UseInSearch { get; set; } = false;
         public bool A_IsDeleted { get; set; } = false;
         public bool A_Status { get; set; } = false;
+        public bool A_ShowInDetail { get; set; } = false;//if true show this attribute in product detail box
+
         public string Lang { get; set; } = "fa";
     }
 }

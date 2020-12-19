@@ -65,7 +65,7 @@ namespace Barayand.DAL.Context
         public DbSet<EnergyUsageModel> EnergyUsage { get; set; }//combined with BoxGiftWrapper(کادوپیچ)
         public DbSet<ManufacturContryModel> ManufacturingCuntry { get; set; }
         public DbSet<ProductCombineModel> ProductCombine { get; set; }//combine warranty and color (ترکیب گارانتی و رنگ - جدول قیمت محصول)
-        
+        public DbSet<ExpertReviewModel> ExpertReview { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
