@@ -163,6 +163,23 @@ namespace Barayand.Controllers.Shared
                 return null;
             }
         }
+        [Route("uploadProductManual")]
+        [AcceptVerbs]
+        public async Task<ActionResult> ProductManualFile([FromForm] IFormFile file )
+        {
+            try
+            {
+                if (file == null)
+                {
+                    return null;
+                }
+                return new JsonResult(await uploaderService.uploadDocument(file, "PRODMANUAL", "NONE"));
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
         [Route("uploadDigitalPrdVideo/{loc}")]
         [AcceptVerbs]
         public async Task<ActionResult> uploadDpVideo([FromForm] IFormFile file, string loc)

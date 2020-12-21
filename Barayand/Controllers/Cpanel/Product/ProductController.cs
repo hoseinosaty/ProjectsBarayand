@@ -24,10 +24,11 @@ namespace Barayand.Controllers.Cpanel.Product
         private readonly IPublicMethodRepsoitory<ProductCombineModel> _combinerepository;
         private readonly IPublicMethodRepsoitory<WarrantyModel> _warrantyrepo;
         private readonly IPublicMethodRepsoitory<ColorModel> _colorrepo;
+        private readonly IProductManualRepository _manualrepo;
         private readonly IPRRepository _productrelationrepo;
         private readonly IPerfectProductRepository _productperfectrepo;
         private readonly ISetProductRepository _productsetrepo;
-        public ProductController(IMapper mapper, IPublicMethodRepsoitory<ProductModel> repository, IPRRepository productrelationrepo, IPublicMethodRepsoitory<ProductCombineModel> combinerepo, IPublicMethodRepsoitory<WarrantyModel> warrantyrepo, IPublicMethodRepsoitory<ColorModel> colorrepo, IPerfectProductRepository perfectProduct, ISetProductRepository productsetrepo)
+        public ProductController(IMapper mapper, IPublicMethodRepsoitory<ProductModel> repository, IPRRepository productrelationrepo, IPublicMethodRepsoitory<ProductCombineModel> combinerepo, IPublicMethodRepsoitory<WarrantyModel> warrantyrepo, IPublicMethodRepsoitory<ColorModel> colorrepo, IPerfectProductRepository perfectProduct, ISetProductRepository productsetrepo, IProductManualRepository manualrepo)
         {
             this._repository = repository;
             this._productrelationrepo = productrelationrepo;
@@ -35,7 +36,8 @@ namespace Barayand.Controllers.Cpanel.Product
             this._warrantyrepo = warrantyrepo;
             this._colorrepo = colorrepo;
             this._productperfectrepo = perfectProduct;
-            _productsetrepo = productsetrepo;
+            this._productsetrepo = productsetrepo;
+            this._manualrepo = manualrepo;
             this._mapper = mapper;
         }
         [Route("AddProduct")]
@@ -385,5 +387,33 @@ namespace Barayand.Controllers.Cpanel.Product
                 return new JsonResult(ResponseModel.ServerInternalError(data: ex));
             }
         }
+        [Route("AddProductManual")]
+        [HttpPost]
+        public async Task<ActionResult> AddProductManual(OutModels.Models.ProductManual product)
+        {
+            try
+            {
+                ProductManualModel b = (ProductManualModel)_mapper.Map<OutModels.Models.ProductManual, ProductManualModel>(product);
+                return new JsonResult(await this._manualrepo.Insert(b));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(ResponseModel.ServerInternalError(data: ex));
+            }
+        }
+        [Route("GetProductManual/{pid}")]
+        [HttpPost]
+        public async Task<ActionResult> GetProductManual(int pid)
+        {
+            try
+            {
+                return new JsonResult(ResponseModel.Success(data: await this._manualrepo.GetByProductId(pid)));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(ResponseModel.ServerInternalError(data: ex));
+            }
+        }
+
     }
 }

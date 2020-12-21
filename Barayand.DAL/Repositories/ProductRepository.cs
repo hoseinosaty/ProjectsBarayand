@@ -315,7 +315,8 @@ namespace Barayand.DAL.Repositories
                         attributeStructures.Add(new AttributeStructure()
                         {
                             AnswerTitle = answer,
-                            AttributeTitle = attribute.A_Title
+                            AttributeTitle = attribute.A_Title,
+                            AttributeId = attribute.A_Id
                         });
                     }
                     

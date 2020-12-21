@@ -24,7 +24,7 @@ namespace Barayand.DAL.Repositories
             try
             {
                 var all = ((List<ExpertReviewModel>)(await GetAll()).Data);
-                return all.Where(x=>x.E_ProductId == pid).ToList();
+                return all.Where(x=>x.E_ProductId == pid && !x.E_IsDeleted).ToList();
             }
             catch(Exception ex)
             {

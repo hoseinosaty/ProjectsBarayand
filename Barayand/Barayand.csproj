@@ -82,6 +82,9 @@
     <None Update="App_Data\Data\Upload\Media\ProductDemoAudio\noimage.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="App_Data\Data\Upload\Media\ProductManual\noimage.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="App_Data\Data\Upload\Media\Seo\ContentSeoImg\noimage.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

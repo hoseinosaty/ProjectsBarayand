@@ -14,7 +14,7 @@ using Barayand.OutModels.Miscellaneous;
 
 namespace Barayand.Controllers.Cpanel.Product
 {
-    [Route("api/[controller]")]
+    [Route("api/cpanel/[controller]")]
     [ApiController]
     public class ExpertReviewController : ControllerBase
     {
@@ -39,6 +39,21 @@ namespace Barayand.Controllers.Cpanel.Product
                 return new JsonResult(ResponseModel.ServerInternalError(data:ex));
             }
         }
+        [Route("UpdateExpertReview")]
+        [HttpPost]
+        public async Task<IActionResult> UpdateExpertReview(OutModels.Models.ExpertReview er)
+        {
+            try
+            {
+                ExpertReviewModel erm = (ExpertReviewModel)_mapper.Map<OutModels.Models.ExpertReview, ExpertReviewModel>(er);
+                return new JsonResult(await _repository.Update(erm));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(ResponseModel.ServerInternalError(data: ex));
+            }
+        }
+
         [Route("DisableExpertReview")]
         [HttpPost]
         public async Task<IActionResult> DisableExpertReview(OutModels.Models.ExpertReview er)
@@ -78,7 +93,7 @@ namespace Barayand.Controllers.Cpanel.Product
                 return new JsonResult(ResponseModel.ServerInternalError(data: ex));
             }
         }
-        [Route("LoadExpertReviews")]
+        [Route("LoadExpertReviews/{pid}")]
         [HttpPost]
         public async Task<IActionResult> LoadExpertReviews(int pid)
         {

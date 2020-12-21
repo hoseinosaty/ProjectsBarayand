@@ -7,7 +7,7 @@ namespace Barayand.OutModels.Response
 {
     public static class ResponseModel
     {
-        public static ResponseStructure Success(string msg = null,object data = null,bool state = true)
+        public static ResponseStructure Success(string msg = "عملیات با موفقیت انجام شد",object data = null,bool state = true)
         {
             return new ResponseStructure() {Msg = msg,Data = data,Status = state };
         }

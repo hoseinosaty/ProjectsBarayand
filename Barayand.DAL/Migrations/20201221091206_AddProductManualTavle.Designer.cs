@@ -4,14 +4,16 @@ using Barayand.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Barayand.DAL.Migrations
 {
     [DbContext(typeof(BarayandContext))]
-    partial class BarayandContextModelSnapshot : ModelSnapshot
+    [Migration("20201221091206_AddProductManualTavle")]
+    partial class AddProductManualTavle
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1420,12 +1422,6 @@ namespace Barayand.DAL.Migrations
 
                     b.Property<string>("M_FileName")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("M_Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("M_ProductId")
-                        .HasColumnType("int");
 
                     b.Property<bool>("M_Status")
                         .HasColumnType("bit");

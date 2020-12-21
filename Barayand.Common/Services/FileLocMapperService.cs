@@ -54,6 +54,9 @@ namespace Barayand.Common.Services
                     case "SLIDER":
                         FileLocation += MainSetting.SelectToken("SLIDER").ToString();
                         break;
+                    case "PRODMANUAL":
+                        FileLocation += MainSetting.SelectToken("PRODMANUAL").ToString();
+                        break;
                 }
                 
                 FileLocation += UploadAddress.SelectToken(FireFolder).ToString();

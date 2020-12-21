@@ -24,7 +24,7 @@ namespace Barayand.Common.Services
                 string root = FileLocMapper.LocateMediaFile(fireFlag, loc);
                 var split = data.Split(',');
                 var strings = split[1].Split('-');
-                byte[] imageBytes = await CompressorService.CompressBase64(Convert.FromBase64String(strings[0]),w,h);
+                byte[] imageBytes = Convert.FromBase64String(strings[0]);
                 MemoryStream ms = new MemoryStream(imageBytes, 0, imageBytes.Length);
                 ms.Write(imageBytes, 0, imageBytes.Length);
                 Image image = Image.FromStream(ms, true);
