@@ -67,6 +67,7 @@ namespace Barayand.DAL.Context
         public DbSet<ProductCombineModel> ProductCombine { get; set; }//combine warranty and color (ترکیب گارانتی و رنگ - جدول قیمت محصول)
         public DbSet<ExpertReviewModel> ExpertReview { get; set; }
         public DbSet<ProductManualModel> ProductManual { get; set; }
+        public DbSet<PromotionBoxModel> PromotionBoxs { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

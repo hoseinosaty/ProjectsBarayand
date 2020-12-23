@@ -4,14 +4,16 @@ using Barayand.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Barayand.DAL.Migrations
 {
     [DbContext(typeof(BarayandContext))]
-    partial class BarayandContextModelSnapshot : ModelSnapshot
+    [Migration("20201223070730_AddSectionIdToPromotionBoxModel")]
+    partial class AddSectionIdToPromotionBoxModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1649,8 +1651,8 @@ namespace Barayand.DAL.Migrations
                     b.Property<string>("B_Seo")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("B_Title")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("B_Title")
+                        .HasColumnType("int");
 
                     b.Property<int>("B_Type")
                         .HasColumnType("int");

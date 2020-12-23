@@ -74,6 +74,7 @@ namespace Barayand
                 mc.AddProfile(new Common.MapperProfiles.ProductCombineProfiler());
                 mc.AddProfile(new Common.MapperProfiles.ExpertReviewProfiler());
                 mc.AddProfile(new Common.MapperProfiles.ProductManualProfile());
+                mc.AddProfile(new Common.MapperProfiles.PromotionBoxProfiler());
             });
             IMapper mapper = MapperConfiguration.CreateMapper();
             services.AddSingleton(mapper);
@@ -85,10 +86,11 @@ namespace Barayand
             services.AddScoped(typeof(IPRRepository),typeof(RelationProductRepository));
             services.AddScoped(typeof(IPerfectProductRepository),typeof(PerfectProductRepository));
             services.AddScoped(typeof(ISetProductRepository),typeof(SetProductRepository));
-            //services.AddScoped(typeof(IGiftProductRepository),typeof(SetProductRepository));
+            services.AddScoped(typeof(IGiftProductRepository),typeof(GiftProductRepository));
             services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
             services.AddScoped(typeof(IFormulaRepository), typeof(FormulaRepository));
             services.AddScoped(typeof(ICommentRepository), typeof(CommentRepository));
+            services.AddScoped(typeof(IPromotionRepository), typeof(PromotionRepository));
             services.AddScoped(typeof(IFileAccessService), typeof(Barayand.Services.Services.FileAccessSerivce));
             services.AddScoped(typeof(ISmsService), typeof(Barayand.Services.Services.SmsService));
             services.AddScoped(typeof(IPublicMethodRepsoitory<GalleryCategoryModel>),typeof(GalleryCatRepository));

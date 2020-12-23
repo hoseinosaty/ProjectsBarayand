@@ -28,7 +28,8 @@ namespace Barayand.Controllers.Cpanel.Product
         private readonly IPRRepository _productrelationrepo;
         private readonly IPerfectProductRepository _productperfectrepo;
         private readonly ISetProductRepository _productsetrepo;
-        public ProductController(IMapper mapper, IPublicMethodRepsoitory<ProductModel> repository, IPRRepository productrelationrepo, IPublicMethodRepsoitory<ProductCombineModel> combinerepo, IPublicMethodRepsoitory<WarrantyModel> warrantyrepo, IPublicMethodRepsoitory<ColorModel> colorrepo, IPerfectProductRepository perfectProduct, ISetProductRepository productsetrepo, IProductManualRepository manualrepo)
+        private readonly IGiftProductRepository _productgiftrepo;
+        public ProductController(IMapper mapper, IPublicMethodRepsoitory<ProductModel> repository, IPRRepository productrelationrepo, IPublicMethodRepsoitory<ProductCombineModel> combinerepo, IPublicMethodRepsoitory<WarrantyModel> warrantyrepo, IPublicMethodRepsoitory<ColorModel> colorrepo, IPerfectProductRepository perfectProduct, ISetProductRepository productsetrepo, IProductManualRepository manualrepo, IGiftProductRepository productgiftrepo)
         {
             this._repository = repository;
             this._productrelationrepo = productrelationrepo;
@@ -38,6 +39,7 @@ namespace Barayand.Controllers.Cpanel.Product
             this._productperfectrepo = perfectProduct;
             this._productsetrepo = productsetrepo;
             this._manualrepo = manualrepo;
+            this._productgiftrepo = productgiftrepo;
             this._mapper = mapper;
         }
         [Route("AddProduct")]
@@ -153,7 +155,15 @@ namespace Barayand.Controllers.Cpanel.Product
             {
                 List<ProductModel> data = (List<ProductModel>)(await this._repository.GetAll()).Data;
                 List<ProductCombineModel> AllCombines = ((List<ProductCombineModel>)(await this._combinerepository.GetAll()).Data).Where(x=>!x.X_IsDeleted).ToList();
-                List<OutModels.Models.Product> result = _mapper.Map<List<ProductModel>, List<OutModels.Models.Product>>(data.Where(x => x.P_Id != pid).ToList());
+                List<OutModels.Models.Product> result = new List<OutModels.Models.Product>();
+                if(pid != 0)
+                {
+                    result = _mapper.Map<List<ProductModel>, List<OutModels.Models.Product>>(data.Where(x => x.P_Id != pid).ToList());
+                }
+                else
+                {
+                    result = _mapper.Map<List<ProductModel>, List<OutModels.Models.Product>>(data.ToList());
+                }
                 
                 if(title != null)
                 {
@@ -167,7 +177,7 @@ namespace Barayand.Controllers.Cpanel.Product
                 List<object> Prods = new List<object>();
                 foreach(var item in result)
                 {
-                    var ProdCombines = AllCombines.Where(x => x.X_ProductId == item.P_Id).ToList();
+                    var ProdCombines = AllCombines.Where(x => x.X_ProductId == item.P_Id && x.X_Status && !x.X_IsDeleted).ToList();
                     if(ProdCombines.Count > 0)
                     {
                         int i = 1;
@@ -251,6 +261,32 @@ namespace Barayand.Controllers.Cpanel.Product
             try
             {
                 return new JsonResult(await _productperfectrepo.GetAllRelation(data));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(ResponseModel.ServerInternalError(data: ex));
+            }
+        }
+        [Route("AddProductGift")]
+        [HttpPost]
+        public async Task<ActionResult> AddProductGift(List<GiftProductModel> data)
+        {
+            try
+            {
+                return new JsonResult(await _productgiftrepo.UpdateRelation(data));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(ResponseModel.ServerInternalError(data: ex));
+            }
+        }
+        [Route("GetProductGift")]
+        [HttpPost]
+        public async Task<ActionResult> GetProductGift(Miscellaneous data)
+        {
+            try
+            {
+                return new JsonResult(await _productgiftrepo.GetAllRelation(data));
             }
             catch (Exception ex)
             {
