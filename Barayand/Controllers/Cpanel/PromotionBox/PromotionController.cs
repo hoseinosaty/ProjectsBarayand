@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Barayand.DAL.Interfaces;
 using Barayand.Models.Entity;
+using Barayand.OutModels.Miscellaneous;
 using Barayand.OutModels.Response;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,13 +18,15 @@ namespace Barayand.Controllers.Cpanel.PromotionBox
     public class PromotionController : ControllerBase
     {
         private readonly IPromotionRepository _promotionrepo;
+        private readonly IPromotionBoxProdRepository _promotionBoxProd;
         private readonly IMapper _mapper;
         private readonly ILogger<PromotionController> _logger;
-        public PromotionController(IPromotionRepository promotionrepo, IMapper mapper, ILogger<PromotionController> logger)
+        public PromotionController(IPromotionRepository promotionrepo, IMapper mapper, ILogger<PromotionController> logger, IPromotionBoxProdRepository promotionBoxProd)
         {
             _promotionrepo = promotionrepo;
             _mapper = mapper;
             _logger = logger;
+            _promotionBoxProd = promotionBoxProd;
         }
         [Route("AddBox")]
         [HttpPost]
@@ -45,12 +48,39 @@ namespace Barayand.Controllers.Cpanel.PromotionBox
         {
             try
             {
-                var AllPromotions = ((List<PromotionBoxModel>)(await _promotionrepo.GetAll()).Data).ToList();
+                var AllPromotions = ((List<PromotionBoxModel>)(await _promotionrepo.GetAll()).Data).Where(x=>x.B_Type == type).ToList();
                 return new JsonResult(ResponseModel.Success(data:AllPromotions));
             }
             catch(Exception ex)
             {
                 return new JsonResult(ResponseModel.ServerInternalError(data:ex));
+            }
+        }
+        [Route("AddProductToBox")]
+        [HttpPost]
+        public async Task<IActionResult> AddProductToBox(List<Barayand.OutModels.Models.PromotionBoxProducts> pb)
+        {
+            try
+            {
+                List<PromotionBoxProductsModel> pbm = (List<PromotionBoxProductsModel>)_mapper.Map<List<Barayand.OutModels.Models.PromotionBoxProducts>, List<PromotionBoxProductsModel>>(pb);
+                return new JsonResult(await _promotionBoxProd.UpdateRelation(pbm));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(ResponseModel.ServerInternalError(data: ex));
+            }
+        }
+        [Route("GetProductRelation")]
+        [HttpPost]
+        public async Task<ActionResult> GetProductRelation(Miscellaneous data)
+        {
+            try
+            {
+                return new JsonResult(await _promotionBoxProd.GetAllRelation(data));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(ResponseModel.ServerInternalError(data: ex));
             }
         }
     }

@@ -75,6 +75,7 @@ namespace Barayand
                 mc.AddProfile(new Common.MapperProfiles.ExpertReviewProfiler());
                 mc.AddProfile(new Common.MapperProfiles.ProductManualProfile());
                 mc.AddProfile(new Common.MapperProfiles.PromotionBoxProfiler());
+                mc.AddProfile(new Common.MapperProfiles.PromotionBoxProductProfiler());
             });
             IMapper mapper = MapperConfiguration.CreateMapper();
             services.AddSingleton(mapper);
@@ -134,6 +135,7 @@ namespace Barayand
             services.AddScoped(typeof(IPublicMethodRepsoitory<ProductCombineModel>), typeof(ProductCombineRepository));
             services.AddScoped(typeof(IProductManualRepository), typeof(ProductManualRepository));
             services.AddScoped(typeof(IExpertReviewRepository), typeof(ExpertReviewRespository));
+            services.AddScoped(typeof(IPromotionBoxProdRepository), typeof(PromotionBoxProdRepository));
             //services.AddScoped<IGenericRepository<Barayand.Models.Entity.ColorModel>,
             //    ColorRepository>();
             //services.AddScoped<IGenericRepository<Barayand.Models.Entity.AttributeModel>,

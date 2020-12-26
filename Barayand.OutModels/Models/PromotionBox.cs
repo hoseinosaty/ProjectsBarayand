@@ -8,6 +8,8 @@ namespace Barayand.OutModels.Models
     public class PromotionBox
     {
         public int B_Id { get; set; }
+        public int B_EntityId { get; set; } = 0;//if box is for category then category id filled here
+
         public string B_Title { get; set; }
         public string B_Image { get; set; } = "noimage.png";
         public string B_Seo { get; set; }

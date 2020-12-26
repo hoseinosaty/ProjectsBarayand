@@ -55,6 +55,7 @@ namespace Barayand.DAL.Repositories
                     checkExists.B_Image = entity.B_Image;
                     checkExists.B_Seo = entity.B_Seo;
                     checkExists.B_Title = entity.B_Title;
+                    checkExists.B_Type = entity.B_Type;
                     checkExists.Updated_At = DateTime.Now;
                     return await this.Update(checkExists);
                 }

@@ -147,6 +147,72 @@ namespace Barayand.Controllers.Cpanel.Product
                 return new JsonResult(ResponseModel.ServerInternalError(data:ex));
             }
         }
+        [Route("LoadProductsForBoxs/{pid}/{page?}/{count?}/{title?}/{code?}")]
+        [HttpPost]
+        public async Task<ActionResult> LoadProductsForBoxs(int page = 1,int count = 5,int pid = 0,string title = null,string code = null)
+        {
+            try
+            {
+                List<ProductModel> data = (List<ProductModel>)(await this._repository.GetAll()).Data;
+                List<ProductCombineModel> AllCombines = ((List<ProductCombineModel>)(await this._combinerepository.GetAll()).Data).Where(x=>!x.X_IsDeleted).ToList();
+                List<OutModels.Models.Product> result = new List<OutModels.Models.Product>();
+                if(pid != 0)
+                {
+                    result = _mapper.Map<List<ProductModel>, List<OutModels.Models.Product>>(data.Where(x => x.P_Id != pid).ToList());
+                }
+                else
+                {
+                    result = _mapper.Map<List<ProductModel>, List<OutModels.Models.Product>>(data.ToList());
+                }
+                
+                if(title != null)
+                {
+                    result = result.Where(x=>x.P_Title.Contains(title,StringComparison.InvariantCultureIgnoreCase) || x.P_Description.Contains(title, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                }
+                if(code != null)
+                {
+                    result = result.Where(x => x.P_Code.Contains(code, StringComparison.InvariantCultureIgnoreCase)).ToList();
+                }
+                
+                List<object> Prods = new List<object>();
+                foreach(var item in result)
+                {
+                    var ProdCombines = AllCombines.Where(x => x.X_ProductId == item.P_Id && x.X_Status && !x.X_IsDeleted).ToList();
+                    if(ProdCombines.Count > 0)
+                    {
+                        int i = 1;
+                        foreach (var combine in ProdCombines)
+                        {
+                            var w = await _warrantyrepo.GetById(combine.X_WarrantyId);
+                            var c = await _colorrepo.GetById(combine.X_ColorId);
+                            if(w != null && c != null)
+                            {
+                                Prods.Add(new {
+                                    counter = i,
+                                    id = item.P_Id,
+                                    code = item.P_Code,
+                                    title = item.P_Title,
+                                    warranty = w.W_Title,
+                                    wid = w.W_Id,
+                                    cid = c.C_Id,
+                                    color = c.C_Title,
+                                    price = combine.X_Price.ToString("#,#"),
+                                    discount = combine.X_Discount
+                                });
+                                i++;
+                            }
+                        }
+                    }
+                }
+                int totalPages = (int)Math.Ceiling((double)Prods.Count() / count);
+                Prods = Prods.Skip(count * (page - 1)).Take(count).ToList();
+                return new JsonResult(ResponseModel.Success("PRODUCTS_LIST_RETURNED", new {Products = Prods, TotalPages = totalPages,CurrentPage = page}));
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(ResponseModel.ServerInternalError(data: ex));
+            }
+        }
         [Route("LoadProductsDeletePid/{pid}/{page?}/{count?}/{title?}/{code?}")]
         [HttpPost]
         public async Task<ActionResult> LoadProducts(int page = 1,int count = 5,int pid = 0,string title = null,string code = null)

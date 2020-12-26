@@ -4,14 +4,16 @@ using Barayand.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Barayand.DAL.Migrations
 {
     [DbContext(typeof(BarayandContext))]
-    partial class BarayandContextModelSnapshot : ModelSnapshot
+    [Migration("20201226082706_PromotionBoxProductsTable")]
+    partial class PromotionBoxProductsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1634,9 +1636,6 @@ namespace Barayand.DAL.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("B_EntityId")
-                        .HasColumnType("int");
-
                     b.Property<string>("B_Image")
                         .HasColumnType("nvarchar(max)");
 
@@ -1694,10 +1693,10 @@ namespace Barayand.DAL.Migrations
                     b.Property<decimal>("X_DiscountedPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("X_ProdId")
+                    b.Property<int>("X_MainProdId")
                         .HasColumnType("int");
 
-                    b.Property<int>("X_SectionId")
+                    b.Property<int>("X_ProdId")
                         .HasColumnType("int");
 
                     b.Property<int>("X_WarrantyId")
