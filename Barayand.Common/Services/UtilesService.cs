@@ -71,17 +71,11 @@ namespace Barayand.Common.Services
             //string host = "http://valhalla.barayand.net/";
             //string host = "http://localhost:44369/";
             //string host = "https://valhallaplanet.art/";
-            string host = "";
-            if(Thread.CurrentThread.CurrentCulture.Name == "fa")
-            {
-                host = "http://gbook.barayand.net/";
-            }
-            else
-            {
-                host = "http://gbooken.barayand.net/";
-            }
+            string host = "http://homekito.barayand.net/";
             switch (identifier)
             {
+                case "Root":
+                    return host + "api/fm/dl/ELOGO/NONE/";
                 case "ProductMainImage":
                     return host+ "api/fm/dl/ELOGO/PRDIMG/";
                 case "ProductVideo":

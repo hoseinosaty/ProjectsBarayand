@@ -18,5 +18,10 @@ namespace Barayand.Models.Entity
         public int X_ColorId { get; set; } = 0;
         public int X_WarrantyId { get; set; } = 0;
         public decimal X_DiscountedPrice { get; set; } = 0;
+        public DateTime X_StartDate { get; set; }//استفاده فقط در فروش ویژه
+        public DateTime X_EndDate { get; set; }//استفاده فقط در فروش ویژه
+        public bool X_Status { get; set; } = true;//استفاده فقط در فروش ویژه
+        public bool X_ShowInIndex { get; set; } = false;//استفاده فقط در فروش ویژه
+
     }
 }

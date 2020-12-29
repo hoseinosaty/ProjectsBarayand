@@ -1,0 +1,989 @@
+﻿@inject Barayand.DAL.Interfaces.IPublicMethodRepsoitory<Barayand.Models.Entity.SliderModel> _sliderrepo;
+
+@{
+    //List<Barayand.Models.Entity.SliderModel> Sliders = ((List<Barayand.Models.Entity.SliderModel>)(await _sliderrepo.GetAll()).Data).Where(x =>x.S_Status).OrderBy(x => x.S_OrderField).ToList();
+    var staticBox = (List<Barayand.Models.Entity.PromotionBoxModel>)ViewBag.staticBox;
+    var moveableBox = (List<Barayand.Models.Entity.PromotionBoxModel>)ViewBag.moveableBox;
+    Barayand.Models.Entity.PromotionBoxModel sec = null;
+}
+<div class="contentMain">
+    <div class="container">
+        <section class="secADS">
+            <div class="rowCustom BxADS">
+                <div class="col1">
+                    <div class="SliderOne swiper-container">
+                        <div class="swiper-wrapper">
+                            @*@foreach (var item in Sliders)
+                            {
+                                string img = ((bool)ViewBag.IsMobile) ? item.S_MobileFileLink : item.S_DesktopFileLink;
+                                <div class="swiper-slide">
+                                    <a href="#" class="itemSliderOne"
+                                       style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Slider")@img);"></a>
+                                </div>
+                            }*@
+                        </div>
+                        <!-- Add Arrows -->
+                        <div class="NextPrevSlider">
+                            <div class="swiper-button-next"></div>
+                            <div class="swiper-button-prev"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col2">
+                    @{
+                        sec = staticBox.FirstOrDefault(x => x.B_SectionId == 1);
+                    }
+                    @if (sec != null)
+                    {
+                        if (sec.B_LoadType == 1)
+                        {
+                            <a href="/prod?" class="itemBoxADS" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image);"></a>
+                        }
+                        else
+                        {
+                            <a href="@sec.B_Link" class="itemBoxADS" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image);"></a>
+                        }
+                    }
+                    @{
+                        sec = staticBox.FirstOrDefault(x => x.B_SectionId == 2);
+                    }
+                    @if (sec != null)
+                    {
+                        if (sec.B_LoadType == 1)
+                        {
+                            <a href="/prod?" class="itemBoxADS" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image);"></a>
+                        }
+                        else
+                        {
+                            <a href="@sec.B_Link" class="itemBoxADS" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image);"></a>
+                        }
+                    }
+                </div>
+            </div>
+            <div class="rowCustom BoxesADS">
+                @{
+                    sec = staticBox.FirstOrDefault(x => x.B_SectionId == 3);
+                }
+                @if (sec != null)
+                {
+                    if (sec.B_LoadType == 1)
+                    {
+                        <a href="/prod?" class="itemBoxADS" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image);"></a>
+                    }
+                    else
+                    {
+                        <a href="@sec.B_Link" class="itemBoxADS" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image);"></a>
+                    }
+                }
+                @{
+                    sec = staticBox.FirstOrDefault(x => x.B_SectionId == 4);
+                }
+                @if (sec != null)
+                {
+                    if (sec.B_LoadType == 1)
+                    {
+                        <a href="/prod?" class="itemBoxADS" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image);"></a>
+                    }
+                    else
+                    {
+                        <a href="@sec.B_Link" class="itemBoxADS" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image);"></a>
+                    }
+                }
+                @{
+                    sec = staticBox.FirstOrDefault(x => x.B_SectionId == 5);
+                }
+                @if (sec != null)
+                {
+                    if (sec.B_LoadType == 1)
+                    {
+                        <a href="/prod?" class="itemBoxADS" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image);"></a>
+                    }
+                    else
+                    {
+                        <a href="@sec.B_Link" class="itemBoxADS" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image);"></a>
+                    }
+                }
+            </div>
+        </section>
+        <section class="secSurprisingly">
+            <div class="col1">
+                <div class="textSurprise">
+                    <img src="dist/img/Surprise.png" />
+                    <div class="discountTitleSurprise">
+                        تــا <span>43%</span> تخفیف
+                    </div>
+                    <a href="#" class="moreSurprise">مشاهده</a>
+                </div>
+            </div>
+            <div class="col2">
+                <div class="SliderSurprising arrowCustom swiper-container">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <div class="itemSurpriseBox">
+                                <a href="#" class="hoverLink"></a>
+                                <div class="pic" style="background-image: url(dist/img/prod-1.jpg);">
+                                    <img src="dist/img/prod-1.jpg"
+                                         alt="گوشی موبایل اپل مدل iPhone X ظرفیت 256 گیگابایت">
+                                </div>
+                                <h2 class="title">گوشی موبایل اپل مدل iPhone X ظرفیت 256 گیگابایت</h2>
+                                <div class="priceRealAndPrecent">
+                                    <span class="precent">22%</span>
+                                    <label class="valPrice">2,250,000</label>
+                                </div>
+                                <div class="priceRealAndPrecent Descount">
+                                    <label class="valPrice">1,965,000</label>
+                                    <span class="unit">تومان</span>
+                                </div>
+                                <div class="Timer far fa-clock" class="" data="12 12, 2020 12:30:25"></div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="itemSurpriseBox">
+                                <a href="#" class="hoverLink"></a>
+                                <div class="pic" style="background-image: url(dist/img/prod-1.jpg);">
+                                    <img src="dist/img/prod-1.jpg"
+                                         alt="گوشی موبایل اپل مدل iPhone X ظرفیت 256 گیگابایت">
+                                </div>
+                                <h2 class="title">گوشی موبایل اپل مدل iPhone X ظرفیت 256 گیگابایت</h2>
+                                <div class="priceRealAndPrecent">
+                                    <span class="precent">22%</span>
+                                    <label class="valPrice">2,250,000</label>
+                                </div>
+                                <div class="priceRealAndPrecent Descount">
+                                    <label class="valPrice">1,965,000</label>
+                                    <span class="unit">تومان</span>
+                                </div>
+                                <div class="Timer far fa-clock" class="" data="12 12, 2020 12:30:25"></div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="itemSurpriseBox">
+                                <a href="#" class="hoverLink"></a>
+                                <div class="pic" style="background-image: url(dist/img/prod-1.jpg);">
+                                    <img src="dist/img/prod-1.jpg"
+                                         alt="گوشی موبایل اپل مدل iPhone X ظرفیت 256 گیگابایت">
+                                </div>
+                                <h2 class="title">گوشی موبایل اپل مدل iPhone X ظرفیت 256 گیگابایت</h2>
+                                <div class="priceRealAndPrecent">
+                                    <span class="precent">22%</span>
+                                    <label class="valPrice">2,250,000</label>
+                                </div>
+                                <div class="priceRealAndPrecent Descount">
+                                    <label class="valPrice">1,965,000</label>
+                                    <span class="unit">تومان</span>
+                                </div>
+                                <div class="Timer far fa-clock" class="" data="12 12, 2020 12:30:25"></div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="itemSurpriseBox">
+                                <a href="#" class="hoverLink"></a>
+                                <div class="pic" style="background-image: url(dist/img/prod-1.jpg);">
+                                    <img src="dist/img/prod-1.jpg"
+                                         alt="گوشی موبایل اپل مدل iPhone X ظرفیت 256 گیگابایت">
+                                </div>
+                                <h2 class="title">گوشی موبایل اپل مدل iPhone X ظرفیت 256 گیگابایت</h2>
+                                <div class="priceRealAndPrecent">
+                                    <span class="precent">22%</span>
+                                    <label class="valPrice">2,250,000</label>
+                                </div>
+                                <div class="priceRealAndPrecent Descount">
+                                    <label class="valPrice">1,965,000</label>
+                                    <span class="unit">تومان</span>
+                                </div>
+                                <div class="Timer far fa-clock" class="" data="12 12, 2020 12:30:25"></div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="itemSurpriseBox">
+                                <a href="#" class="hoverLink"></a>
+                                <div class="pic" style="background-image: url(dist/img/prod-1.jpg);">
+                                    <img src="dist/img/prod-1.jpg"
+                                         alt="گوشی موبایل اپل مدل iPhone X ظرفیت 256 گیگابایت">
+                                </div>
+                                <h2 class="title">گوشی موبایل اپل مدل iPhone X ظرفیت 256 گیگابایت</h2>
+                                <div class="priceRealAndPrecent">
+                                    <span class="precent">22%</span>
+                                    <label class="valPrice">2,250,000</label>
+                                </div>
+                                <div class="priceRealAndPrecent Descount">
+                                    <label class="valPrice">1,965,000</label>
+                                    <span class="unit">تومان</span>
+                                </div>
+                                <div class="Timer far fa-clock" class="" data="12 12, 2020 12:30:25"></div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="itemSurpriseBox">
+                                <a href="#" class="hoverLink"></a>
+                                <div class="pic" style="background-image: url(dist/img/prod-1.jpg);">
+                                    <img src="dist/img/prod-1.jpg"
+                                         alt="گوشی موبایل اپل مدل iPhone X ظرفیت 256 گیگابایت">
+                                </div>
+                                <h2 class="title">گوشی موبایل اپل مدل iPhone X ظرفیت 256 گیگابایت</h2>
+                                <div class="priceRealAndPrecent">
+                                    <span class="precent">22%</span>
+                                    <label class="valPrice">2,250,000</label>
+                                </div>
+                                <div class="priceRealAndPrecent Descount">
+                                    <label class="valPrice">1,965,000</label>
+                                    <span class="unit">تومان</span>
+                                </div>
+                                <div class="Timer far fa-clock" class="" data="12 12, 2020 12:30:25"></div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="itemSurpriseBox">
+                                <a href="#" class="hoverLink"></a>
+                                <div class="pic" style="background-image: url(dist/img/prod-1.jpg);">
+                                    <img src="dist/img/prod-1.jpg"
+                                         alt="گوشی موبایل اپل مدل iPhone X ظرفیت 256 گیگابایت">
+                                </div>
+                                <h2 class="title">گوشی موبایل اپل مدل iPhone X ظرفیت 256 گیگابایت</h2>
+                                <div class="priceRealAndPrecent">
+                                    <span class="precent">22%</span>
+                                    <label class="valPrice">2,250,000</label>
+                                </div>
+                                <div class="priceRealAndPrecent Descount">
+                                    <label class="valPrice">1,965,000</label>
+                                    <span class="unit">تومان</span>
+                                </div>
+                                <div class="Timer far fa-clock" class="" data="12 12, 2020 12:30:25"></div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="itemSurpriseBox">
+                                <a href="#" class="hoverLink"></a>
+                                <div class="pic" style="background-image: url(dist/img/prod-1.jpg);">
+                                    <img src="dist/img/prod-1.jpg"
+                                         alt="گوشی موبایل اپل مدل iPhone X ظرفیت 256 گیگابایت">
+                                </div>
+                                <h2 class="title">گوشی موبایل اپل مدل iPhone X ظرفیت 256 گیگابایت</h2>
+                                <div class="priceRealAndPrecent">
+                                    <span class="precent">22%</span>
+                                    <label class="valPrice">2,250,000</label>
+                                </div>
+                                <div class="priceRealAndPrecent Descount">
+                                    <label class="valPrice">1,965,000</label>
+                                    <span class="unit">تومان</span>
+                                </div>
+                                <div class="Timer far fa-clock" class="" data="12 12, 2020 12:30:25"></div>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="itemSurpriseBox">
+                                <a href="#" class="hoverLink"></a>
+                                <div class="pic" style="background-image: url(dist/img/prod-1.jpg);">
+                                    <img src="dist/img/prod-1.jpg"
+                                         alt="گوشی موبایل اپل مدل iPhone X ظرفیت 256 گیگابایت">
+                                </div>
+                                <h2 class="title">گوشی موبایل اپل مدل iPhone X ظرفیت 256 گیگابایت</h2>
+                                <div class="priceRealAndPrecent">
+                                    <span class="precent">22%</span>
+                                    <label class="valPrice">2,250,000</label>
+                                </div>
+                                <div class="priceRealAndPrecent Descount">
+                                    <label class="valPrice">1,965,000</label>
+                                    <span class="unit">تومان</span>
+                                </div>
+                                <div class="Timer far fa-clock" class="" data="12 12, 2020 12:30:25"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Add Arrows -->
+                    <div class="NextPrevSlider">
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="secPromotions">
+            <div class="rowCustom promotion">
+                <div class="col">
+                    @{
+                        var secmove1 = moveableBox.FirstOrDefault(x => x.B_SectionId == 17);
+                    }
+                    <div class="card">
+                        <h3 class="titleCard">
+                            <label>@secmove1.B_Title</label>
+                            <a href="/Product/secid" class="moreSee">مشاهده بیشتر</a>
+                        </h3>
+                        <div class="contentCard">
+                            <div class="SlidPromotion3  arrowCustom swiper-container">
+                                <div class="swiper-wrapper">
+                                    @foreach (var item in secmove1.Products.Take(10))
+                                    {
+                                        <div class="swiper-slide">
+                                            <div class="itempromotionbox">
+                                                <a href="#" class="hoverlink"></a>
+                                                <div class="pic" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("productmainimage")@item.P_Image);">
+                                                    <img src="@Barayand.Common.Services.UtilesService.MediaUrls("productmainimage")@item.P_Image"
+                                                         alt="@item.P_Title">
+                                                </div>
+                                                <h2 class="title">@item.P_Title</h2>
+                                                @if (item.IsAvailable)
+                                                {
+                                                    <div class="pricepromo">@item.DefaultProductCombine.CalculatedPrice().ToString("#,#")<span>تومان</span></div>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                                <!-- Add Arrows -->
+                                <div class="NextPrevSlider">
+                                    <div class="swiper-button-next"></div>
+                                    <div class="swiper-button-prev"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    @{
+                        var secmove2 = moveableBox.FirstOrDefault(x => x.B_SectionId == 18);
+                    }
+                    <div class="card">
+                        <h3 class="titleCard">
+                            <label>@secmove2.B_Title</label>
+                            <a href="/Product/secid" class="moreSee">مشاهده بیشتر</a>
+                        </h3>
+                        <div class="contentCard">
+                            <div class="SlidPromotion3  arrowCustom swiper-container">
+                                <div class="swiper-wrapper">
+                                    @foreach (var item in secmove2.Products.Take(10))
+                                    {
+                                        <div class="swiper-slide">
+                                            <div class="itemPromotionBox">
+                                                <a href="#" class="hoverLink"></a>
+                                                <div class="pic" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("ProductMainImage")@item.P_Image);">
+                                                    <img src="@Barayand.Common.Services.UtilesService.MediaUrls("ProductMainImage")@item.P_Image"
+                                                         alt="@item.P_Title">
+                                                </div>
+                                                <h2 class="title">@item.P_Title</h2>
+                                                @if (item.IsAvailable)
+                                                {
+                                                    <div class="pricePromo">@item.DefaultProductCombine.CalculatedPrice().ToString("#,#")<span>تومان</span></div>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                                <!-- Add Arrows -->
+                                <div class="NextPrevSlider">
+                                    <div class="swiper-button-next"></div>
+                                    <div class="swiper-button-prev"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="secAllDayDiscounts">
+            <div class="rowCustom AllDayDiscount">
+                <div class="col">
+                    @{
+                        var secmove3 = moveableBox.FirstOrDefault(x => x.B_SectionId == 19);
+                    }
+                    <div class="card">
+                        <h3 class="titleCard">
+                            <label>@secmove3.B_Title</label>
+                            <a href="#" class="moreSee">مشاهده بیشتر</a>
+                        </h3>
+                        <div class="contentCard">
+                            <div class="SliderAllDayDiscount  arrowCustom swiper-container">
+                                <div class="swiper-wrapper">
+                                    @foreach (var item in secmove3.Products.Take(10))
+                                    {
+                                        <div class="swiper-slide">
+                                            <div class="itemADDiscount">
+                                                <a href="#" class="hoverLink"></a>
+                                                <div class="pic" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("ProductMainImage")@item.P_Image);">
+                                                    <img src="@Barayand.Common.Services.UtilesService.MediaUrls("ProductMainImage")@item.P_Image"
+                                                         alt="@item.P_Title">
+                                                </div>
+                                                <h2 class="title">@item.P_Title</h2>
+                                                @if (item.IsAvailable)
+                                                {
+                                                    <div class="pricePromo">@item.DefaultProductCombine.CalculatedPrice().ToString("#,#")<span>تومان</span></div>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                                <!-- Add Arrows -->
+                                <div class="NextPrevSlider">
+                                    <div class="swiper-button-next"></div>
+                                    <div class="swiper-button-prev"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    @{
+                        var secmove4 = moveableBox.FirstOrDefault(x => x.B_SectionId == 20);
+                    }
+                    <div class="card">
+                        <h3 class="titleCard">
+                            <label>@secmove4.B_Title</label>
+                        </h3>
+                        <div class="contentCard">
+                            <div id="progressslider"></div>
+                            <div class="SliderOneProgress swiper-container">
+                                <div class="swiper-wrapper">
+                                    @foreach (var item in secmove4.Products.Take(10))
+                                    {
+                                        <div class="swiper-slide">
+                                            <div class="todayRecomended">
+                                                <a href="#" class="hoverLink"></a>
+                                                <div class="pic" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("ProductMainImage")@item.P_Image);">
+                                                    <img src="@Barayand.Common.Services.UtilesService.MediaUrls("ProductMainImage")@item.P_Image"
+                                                         alt="@item.P_Title">
+                                                </div>
+                                                <h2 class="title">@item.P_Title</h2>
+                                                @if (item.IsAvailable)
+                                                {
+                                                    <div class="pricePromo">@item.DefaultProductCombine.CalculatedPrice().ToString("#,#")<span>تومان</span></div>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="secFestivals">
+
+            <div class="rowCustom festivalRow">
+                <div class="col">
+                    @{
+                        sec = staticBox.FirstOrDefault(x => x.B_SectionId == 6);
+                    }
+                    @if (sec != null)
+                    {
+                        if (sec.B_LoadType == 1)
+                        {
+                            <a href="#/prod?" class="itemFestival" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image);">
+                                <img src="@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image" alt="@sec.B_Title">
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="@sec.B_Link" class="itemFestival" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image);">
+                                <img src="@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image" alt="@sec.B_Title">
+                            </a>
+                        }
+                    }
+
+                </div>
+                <div class="col">
+                    @{
+                        sec = staticBox.FirstOrDefault(x => x.B_SectionId == 7);
+                    }
+                    @if (sec != null)
+                    {
+                        if (sec.B_LoadType == 1)
+                        {
+                            <a href="#/prod?" class="itemFestival" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image);">
+                                <img src="@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image" alt="@sec.B_Title">
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="@sec.B_Link" class="itemFestival" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image);">
+                                <img src="@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image" alt="@sec.B_Title">
+                            </a>
+                        }
+                    }
+                </div>
+            </div>
+        </section>
+        <section class="secPromotion2">
+            <div class="rowCustom Promotion2">
+                <div class="col">
+                    @{
+                        var secmove5 = moveableBox.FirstOrDefault(x => x.B_SectionId == 21);
+                    }
+                    <div class="card">
+                        <h3 class="titleCard">
+                            <label>@secmove5.B_Title</label>
+                            <a href="#" class="moreSee">مشاهده بیشتر</a>
+                        </h3>
+                        <div class="contentCard">
+
+                            <div class="SlidPromotion6 arrowCustom swiper-container">
+                                <div class="swiper-wrapper">
+                                    @foreach (var item in secmove5.Products.Take(10))
+                                    {
+                                        <div class="swiper-slide">
+                                            <div class="todayRecomended">
+                                                <a href="#" class="hoverLink"></a>
+                                                <div class="pic" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("ProductMainImage")@item.P_Image);">
+                                                    <img src="@Barayand.Common.Services.UtilesService.MediaUrls("ProductMainImage")@item.P_Image"
+                                                         alt="@item.P_Title">
+                                                </div>
+                                                <h2 class="title">@item.P_Title</h2>
+                                                @if (item.IsAvailable)
+                                                {
+                                                    <div class="pricePromo">@item.DefaultProductCombine.CalculatedPrice().ToString("#,#")<span>تومان</span></div>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+
+                                </div>
+                                <!-- Add Arrows -->
+                                <div class="NextPrevSlider">
+                                    <div class="swiper-button-next"></div>
+                                    <div class="swiper-button-prev"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </section>
+
+        <section class="secBoxSpecial">
+            <div class="rowCustom BoxSpecial hor">
+                <div class="col">
+
+                    @{
+                        sec = staticBox.FirstOrDefault(x => x.B_SectionId == 8);
+                    }
+                    @if (sec != null)
+                    {
+                        if (sec.B_LoadType == 1)
+                        {
+                            <a href="#/prod?" class="itemBoxSpecial" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image);">
+                                <img src="@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image" alt="@sec.B_Title">
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="@sec.B_Link" class="itemBoxSpecial" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image);">
+                                <img src="@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image" alt="@sec.B_Title">
+                            </a>
+                        }
+                    }
+
+
+
+                </div>
+                <div class="col">
+                    @{
+                        sec = staticBox.FirstOrDefault(x => x.B_SectionId == 9);
+                    }
+                    @if (sec != null)
+                    {
+                        if (sec.B_LoadType == 1)
+                        {
+                            <a href="#/prod?" class="itemBoxSpecial" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image);">
+                                <img src="@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image" alt="@sec.B_Title">
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="@sec.B_Link" class="itemBoxSpecial" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image);">
+                                <img src="@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image" alt="@sec.B_Title">
+                            </a>
+                        }
+                    }
+
+                </div>
+            </div>
+            <div class="rowCustom BoxSpecial squar">
+                <div class="col">
+
+                    @{
+                        sec = staticBox.FirstOrDefault(x => x.B_SectionId == 10);
+                    }
+                    @if (sec != null)
+                    {
+                        if (sec.B_LoadType == 1)
+                        {
+                            <a href="#/prod?" class="itemBoxSpecial" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image);">
+                                <img src="@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image" alt="@sec.B_Title">
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="@sec.B_Link" class="itemBoxSpecial" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image);">
+                                <img src="@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image" alt="@sec.B_Title">
+                            </a>
+                        }
+                    }
+                </div>
+                <div class="col">
+
+                    @{
+                        sec = staticBox.FirstOrDefault(x => x.B_SectionId == 11);
+                    }
+                    @if (sec != null)
+                    {
+                        if (sec.B_LoadType == 1)
+                        {
+                            <a href="#/prod?" class="itemBoxSpecial" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image);">
+                                <img src="@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image" alt="@sec.B_Title">
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="@sec.B_Link" class="itemBoxSpecial" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image);">
+                                <img src="@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image" alt="@sec.B_Title">
+                            </a>
+                        }
+                    }
+                </div>
+                <div class="col">
+
+                    @{
+                        sec = staticBox.FirstOrDefault(x => x.B_SectionId == 12);
+                    }
+                    @if (sec != null)
+                    {
+                        if (sec.B_LoadType == 1)
+                        {
+                            <a href="#/prod?" class="itemBoxSpecial" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image);">
+                                <img src="@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image" alt="@sec.B_Title">
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="@sec.B_Link" class="itemBoxSpecial" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image);">
+                                <img src="@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image" alt="@sec.B_Title">
+                            </a>
+                        }
+                    }
+                </div>
+                <div class="col">
+
+                    @{
+                        sec = staticBox.FirstOrDefault(x => x.B_SectionId == 13);
+                    }
+                    @if (sec != null)
+                    {
+                        if (sec.B_LoadType == 1)
+                        {
+                            <a href="#/prod?" class="itemBoxSpecial" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image);">
+                                <img src="@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image" alt="@sec.B_Title">
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="@sec.B_Link" class="itemBoxSpecial" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image);">
+                                <img src="@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image" alt="@sec.B_Title">
+                            </a>
+                        }
+                    }
+                </div>
+            </div>
+        </section>
+        <section class="secMostSale">
+            <div class="rowCustom Promotion2">
+                <div class="col">
+                    @{
+                        var secmove6 = moveableBox.FirstOrDefault(x => x.B_SectionId == 22);
+                    }
+                    <div class="card">
+                        <h3 class="titleCard">
+                            <label>@secmove6.B_Title</label>
+                            <a href="#" class="moreSee">مشاهده بیشتر</a>
+                        </h3>
+                        <div class="contentCard">
+
+                            <div class="SlidPromotion6 arrowCustom swiper-container">
+                                <div class="swiper-wrapper">
+                                    @foreach (var item in secmove6.Products.Take(10))
+                                    {
+                                        <div class="swiper-slide">
+                                            <div class="todayRecomended">
+                                                <a href="#" class="hoverLink"></a>
+                                                <div class="pic" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("ProductMainImage")@item.P_Image);">
+                                                    <img src="@Barayand.Common.Services.UtilesService.MediaUrls("ProductMainImage")@item.P_Image"
+                                                         alt="@item.P_Title">
+                                                </div>
+                                                <h2 class="title">@item.P_Title</h2>
+                                                @if (item.IsAvailable)
+                                                {
+                                                    <div class="pricePromo">@item.DefaultProductCombine.CalculatedPrice().ToString("#,#")<span>تومان</span></div>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+
+                                </div>
+                                <!-- Add Arrows -->
+                                <div class="NextPrevSlider">
+                                    <div class="swiper-button-next"></div>
+                                    <div class="swiper-button-prev"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </section>
+
+        <section class="secMostVisit">
+            <div class="rowCustom Promotion2">
+                <div class="col">
+                    @{
+                        var secmove7 = moveableBox.FirstOrDefault(x => x.B_SectionId == 23);
+                    }
+                    <div class="card">
+                        <h3 class="titleCard">
+                            <label>@secmove7.B_Title</label>
+                            <a href="#" class="moreSee">مشاهده بیشتر</a>
+                        </h3>
+                        <div class="contentCard">
+
+                            <div class="SlidPromotion6 arrowCustom swiper-container">
+                                <div class="swiper-wrapper">
+                                    @foreach (var item in secmove7.Products.Take(10))
+                                    {
+                                        <div class="swiper-slide">
+                                            <div class="todayRecomended">
+                                                <a href="#" class="hoverLink"></a>
+                                                <div class="pic" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("ProductMainImage")@item.P_Image);">
+                                                    <img src="@Barayand.Common.Services.UtilesService.MediaUrls("ProductMainImage")@item.P_Image"
+                                                         alt="@item.P_Title">
+                                                </div>
+                                                <h2 class="title">@item.P_Title</h2>
+                                                @if (item.IsAvailable)
+                                                {
+                                                    <div class="pricePromo">@item.DefaultProductCombine.CalculatedPrice().ToString("#,#")<span>تومان</span></div>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+
+                                </div>
+                                <!-- Add Arrows -->
+                                <div class="NextPrevSlider">
+                                    <div class="swiper-button-next"></div>
+                                    <div class="swiper-button-prev"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </section>
+        <section class="secCheapStore">
+            @{
+                sec = staticBox.FirstOrDefault(x => x.B_SectionId == 14);
+            }
+            @if (sec != null)
+            {
+                if (sec.B_LoadType == 1)
+                {
+                    <a href="#/prod?" class="itemCheapStoreADS" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image);">
+                        <img src="@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image" alt="@sec.B_Title">
+                    </a>
+                }
+                else
+                {
+                    <a href="@sec.B_Link" class="itemCheapStoreADS" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image);">
+                        <img src="@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image" alt="@sec.B_Title">
+                    </a>
+                }
+            }
+        </section>
+
+        <section class="secDiscountOnSale">
+            <div class="rowCustom Promotion2">
+                <div class="col">
+                    @{
+                        var secmove8 = moveableBox.FirstOrDefault(x => x.B_SectionId == 24);
+                    }
+                    <div class="card">
+                        <h3 class="titleCard">
+                            <label>@secmove8.B_Title</label>
+                            <a href="#" class="moreSee">مشاهده بیشتر</a>
+                        </h3>
+                        <div class="contentCard">
+
+                            <div class="SlidPromotion6 arrowCustom swiper-container">
+                                <div class="swiper-wrapper">
+                                    @foreach (var item in secmove8.Products.Take(10))
+                                    {
+                                        <div class="swiper-slide">
+                                            <div class="todayRecomended">
+                                                <a href="#" class="hoverLink"></a>
+                                                <div class="pic" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("ProductMainImage")@item.P_Image);">
+                                                    <img src="@Barayand.Common.Services.UtilesService.MediaUrls("ProductMainImage")@item.P_Image"
+                                                         alt="@item.P_Title">
+                                                </div>
+                                                <h2 class="title">@item.P_Title</h2>
+                                                @if (item.IsAvailable)
+                                                {
+                                                    <div class="pricePromo">@item.DefaultProductCombine.CalculatedPrice().ToString("#,#")<span>تومان</span></div>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+
+                                </div>
+                                <!-- Add Arrows -->
+                                <div class="NextPrevSlider">
+                                    <div class="swiper-button-next"></div>
+                                    <div class="swiper-button-prev"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="secBoxSpecial">
+            <div class="rowCustom BoxSpecial hor">
+                <div class="col">
+                    @{
+                        sec = staticBox.FirstOrDefault(x => x.B_SectionId == 15);
+                    }
+                    @if (sec != null)
+                    {
+                        if (sec.B_LoadType == 1)
+                        {
+                            <a href="#/prod?" class="itemBoxSpecial" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image);">
+                                <img src="@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image" alt="@sec.B_Title">
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="@sec.B_Link" class="itemBoxSpecial" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image);">
+                                <img src="@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image" alt="@sec.B_Title">
+                            </a>
+                        }
+                    }
+                </div>
+                <div class="col">
+                    @{
+                        sec = staticBox.FirstOrDefault(x => x.B_SectionId == 16);
+                    }
+                    @if (sec != null)
+                    {
+                        if (sec.B_LoadType == 1)
+                        {
+                            <a href="#/prod?" class="itemBoxSpecial" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image);">
+                                <img src="@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image" alt="@sec.B_Title">
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="@sec.B_Link" class="itemBoxSpecial" style="background-image: url(@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image);">
+                                <img src="@Barayand.Common.Services.UtilesService.MediaUrls("Root")@sec.B_Image" alt="@sec.B_Title">
+                            </a>
+                        }
+                    }
+
+                </div>
+            </div>
+        </section>
+        <section class="secAllServices">
+            <div class="rowCustom AllServices">
+                <div class="col">
+                    <div class="card">
+                        <h3 class="titleCard center">
+                            <label>چه خدماتی ارائه میدهیم</label>
+                        </h3>
+                        <div class="contentCard">
+                            <div class="rowCustom rowServices">
+                                <div class="col">
+                                    <div class="itemService">
+                                        <i class="icon ic1"></i>
+                                        <h4 class="title">مشاوره آنلاین</h4>
+                                    </div>
+                                    <div class="itemService">
+                                        <i class="icon ic2"></i>
+                                        <h4 class="title">مشاوره تلفنی</h4>
+                                    </div>
+                                    <div class="itemService">
+                                        <i class="icon ic3"></i>
+                                        <h4 class="title">خدمات پس از فروش</h4>
+                                    </div>
+                                    <div class="itemService">
+                                        <i class="icon ic4"></i>
+                                        <h4 class="title">سرویس دوره ای</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </section>
+
+        
+
+
+            <div class="newsLetterBox">
+                <div class="ContentNewsLetter">
+                    <h3 class="titleNewsletter">
+                        برای اطلاع از آخرین تخفیف‌ها و جدیدترین کالا‌ها در خبرنامه ثبت‌نام کنید.
+                    </h3>
+                    <div class="FormNewsletter">
+                        <form style="display:block; width:100%" id="frmNewsletter">
+                            <input type="email" id="nlEmail" name="nletter" placeholder="تخفیف را در ایمیل خود دریافت کنید" required />
+                            <div class="input-error"></div>
+                        </form>
+                        <button type="button" onclick="RegisterNewsLetter();" class="btnNewsLetter">عضویت</button>
+                    </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 class="titleCard">
+                <label>برندهای تحت پوشش</label>
+            </h3>
+            <div class="contentCard">
+                <div class="brands">
+                    <a href="#" class="itemBrand" style="background-image: url(dist/img/brands/1.png);">
+                        <img src="dist/img/brands/1.png" alt="">
+                    </a>
+                    <a href="#" class="itemBrand" style="background-image: url(dist/img/brands/2.png);">
+                        <img src="dist/img/brands/2.png" alt="">
+                    </a>
+                    <a href="#" class="itemBrand" style="background-image: url(dist/img/brands/3.png);">
+                        <img src="dist/img/brands/3.png" alt="">
+                    </a>
+                    <a href="#" class="itemBrand" style="background-image: url(dist/img/brands/4.png);">
+                        <img src="dist/img/brands/4.png" alt="">
+                    </a>
+                    <a href="#" class="itemBrand" style="background-image: url(dist/img/brands/1.png);">
+                        <img src="dist/img/brands/1.png" alt="">
+                    </a>
+                    <a href="#" class="itemBrand" style="background-image: url(dist/img/brands/1.png);">
+                        <img src="dist/img/brands/1.png" alt="">
+                    </a>
+                    <a href="#" class="itemBrand" style="background-image: url(dist/img/brands/2.png);">
+                        <img src="dist/img/brands/2.png" alt="">
+                    </a>
+                    <a href="#" class="itemBrand" style="background-image: url(dist/img/brands/3.png);">
+                        <img src="dist/img/brands/3.png" alt="">
+                    </a>
+                </div>
+                <div class="MoreBrand">
+                    <span class="Title">نمایش تمامی</span>
+                    <span class="SubTitle">برنده های تحت پوشش</span>
+                    <a href="#" class="linkMoreBrand">مشاهده</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

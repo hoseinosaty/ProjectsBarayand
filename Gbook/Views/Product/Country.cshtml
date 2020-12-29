@@ -1,0 +1,240 @@
+﻿@model List<Barayand.Models.Entity.ProductModel>
+@{
+    var Country = (Barayand.Models.Entity.ManufacturContryModel)ViewBag.country;
+    var Catlvl2 = (List<Barayand.Models.Entity.ProductCategoryModel>)ViewBag.Catlvl2;
+    var Catlvl1 = (List<Barayand.Models.Entity.ProductCategoryModel>)ViewBag.Catlvl1;
+    string openattr = "";
+}
+<input type="hidden" id="Countryid" value="@Country.M_Id" />
+<input type="hidden" id="catid" value="@ViewBag.catid" />
+
+<div class="loading">
+    <div class="boxLoading">
+        <i class="logo" style="background-image: url(/dist/img/logo.png);"></i>
+        <div class="spinner">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+        </div>
+    </div>
+</div>
+<div class="contentMain">
+    <div class="container">
+        <div class="BoxBreads">
+            <div class="breadcrumbs">
+                <a href="/" class="breadc fas fa-chevron-left">خانه</a>
+                <a href="/Brands" class="breadc fas fa-chevron-left">برند ها</a>
+                @*<a href="/Brand/@Brand.B_Id/@seo.url" class="breadc fas fa-chevron-left">@Brand.B_Title</a>*@
+            </div>
+            <a href="#">Country</a>
+        </div>
+        <section class="secProductList">
+            <div class="ContentListProducts">
+                <div class="col1">
+                    <div class="FilterBox">
+                        <a href="#" class="boxADS">
+                            <img src="/dist/img/listprod-ads-1.jpg" alt="عنوان تبلیغ">
+                        </a>
+                        <div class="accordion activeEvery">
+                            <div class="titleAccordion">
+                                <label>فیلتر های اعمال شده: </label> <small class="remove"
+                                                                            onclick="removeAllFilter()">حذف</small>
+                            </div>
+                            <div class="contentAccordion">
+                                <div class="BoxesFilterSelected">
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion active">
+                            <div class="titleAccordion">
+                                <label>جستجو در نتایج: </label> <span class="fas fa-chevron-down"></span>
+                            </div>
+                            <div class="contentAccordion">
+                                <div class="boxSearchAll">
+                                    <input id="ProductTitle" type="text" class="inputSearchProduct" onkeyup="FilterNameCountry()" placeholder="نام محصول">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion active">
+                            <div class="titleAccordion">
+                                <label>دسته بندی</label> <span class="fas fa-chevron-down"></span>
+                            </div>
+                            <div class="contentAccordion">
+                                <div class="categoriesProduct">
+                                    @foreach (var item in Catlvl1)
+                                    {
+                                        var cat2 = Catlvl2.Where(x => x.PC_ParentId == item.PC_Id);
+                                        var seocatlvl1 = Barayand.Common.Services.UtilesService.ParseSeoData(item.PC_Seo);
+                                        if (item.PC_Id == ViewBag.openattr)
+                                        {
+                                            openattr = "open";
+                                        }
+                                        <span class="parentCatProd @openattr">
+                                            <i class="openparent fal fa-chevron-left"></i>
+                                            <a href="/Products/Country/@Country.M_Id/@Country.M_Title/@item.PC_Id/@seocatlvl1.url" class="linkcat">@item.PC_Title</a>
+
+                                            @foreach (var item2 in cat2)
+                                            {
+                                                var seocatlvl2 = Barayand.Common.Services.UtilesService.ParseSeoData(item2.PC_Seo);
+                                                <span class="childCatProd">
+                                                    <i class="openchild"></i>
+                                                    <a href="/Products/Country/@Country.M_Id/@Country.M_Title/@item2.PC_Id/@seocatlvl2.url" class="linkcat">@item2.PC_Title</a>
+                                                </span>
+                                            }
+                                        </span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cardFilter">
+                            <div class="buttonOnOff">
+                                <input type="checkbox" name="immediatesending" class="immediatesending" id="immediatesending" onchange="Countryproductsearch()">
+                                <label for="immediatesending">
+                                    <i></i>
+                                    <span>فقط ارسال فوری</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="cardFilter">
+                            <div class="buttonOnOff">
+                                <input type="checkbox" name="isAvilable" class="isAvilable" id="isAvilable" onchange="Countryproductsearch()">
+                                <label for="isAvilable">
+                                    <i></i>
+                                    <span>فقط کالاهای موجود</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="accordion ">
+                            <div class="titleAccordion">
+                                <label>محدوده قیمت مورد نظر</label> <span class="fas fa-chevron-down"></span>
+                            </div>
+                            <div class="contentAccordion">
+                                <div class="ContentRangePrice">
+                                    <div class="showRagePrice" data-rtl="1" data-start="0" data-end="@(ViewBag.MaxPrice+1)"
+                                         data-min="@ViewBag.Minprice" data-max="@(ViewBag.MaxPrice+1)" data-step="1000">
+                                        <div class="box-sliderrange">
+                                            <label>تا</label>
+                                            <input type="text" id="input-with-keypress-1" data-type="rageSlider"
+                                                   disabled="">
+                                            <span>تومان</span>
+                                        </div>
+                                        <div class="box-sliderrange">
+                                            <label>از</label>
+                                            <input type="text" id="input-with-keypress-0" data-type="rageSlider"
+                                                   disabled="">
+                                            <span>تومان</span>
+                                        </div>
+                                    </div>
+                                    <div id="steps-slider"></div>
+                                    <div class="SubmitFilter">
+                                        <button type="button" onclick="Countryproductsearch(true);" class="btnsubmitFillter">اعمال محدودیت قیمت</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a href="#" class="boxADS">
+                            <img src="/dist/img/listprod-ads-2.jpg" alt="عنوان تبلیغ 2">
+                        </a>
+                    </div>
+                </div>
+                <div class="col2">
+                    <div class="cardProductList">
+                        <div class="sortProdList">
+                            <label class="sortLabel">
+                                مرتب سازی بر اساس :
+                            </label>
+                            <span class="itemSort" onclick="FilterOrderCountry(1)">پربازدیدترین</span>
+                            <span class="itemSort" onclick="FilterOrderCountry(2)">پرفروشترین </span>
+                            <span class="itemSort" onclick="FilterOrderCountry(3)">محبوبترین</span>
+                            <span class="itemSort" onclick="FilterOrderCountry(4)">جدیدترین</span>
+                            <span class="itemSort" onclick="FilterOrderCountry(5)">ارزانترین</span>
+                            <span class="itemSort" onclick="FilterOrderCountry(6)">گرانترین</span>
+                            <span class="itemSort" onclick="FilterOrderCountry(7)">سریعترین ارسال</span>
+                            <span class="itemSort" onclick="FilterOrderCountry(8)">بهترین فرصت</span>
+                        </div>
+                        <div id="listbrandproduct">
+                            @await Html.PartialAsync("_ProductListCount.cshtml", Model)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="HelpSale">
+            <div class="card">
+                <h3 class="titleCard">
+                    <label>راهنمای خرید مطمئن</label>
+                </h3>
+                <div class="contentCard">
+                    <div class="textMore">
+                        پس از تجربه‌ی فوق‌العاده‌‌‌ی گلکسی نوت 10، اکنون با سطح انتظار بالاتری به‌سراغ گلکسی نوت 20
+                        و گلکسی نوت 20 اولترا، جدیدترین پرچم‌داران قلم‌محور سامسونگ می‌رویم.
+                        احتمالا داستان گوشی‌های گلکسی نوت را بارها شنیده‌اید؛ سامسونگ نزدیک به 9 سال پیش، در جریان
+                        مراسم IFA 2011، در شرایطی که بخش اعظمی از بازار گوشی‌های اندرویدی را دراختیار نداشت، با
+                        حرکتی جسورانه نخستین مدل از سری گوشی‌های گلکسی نوت را معرفی کرد. در آن زمان اکثر گوشی‌ها از
+                        نمایشگرهایی با ابعاد حداکثر 4 اینچ استفاده می‌کردند؛ اما مدل نخست نوت، با نمایشگری 5٫3 اینچی
+                        وارد بازار شد. گلکسی نوت برای سنجش بازخورد کاربران به نمایشگرهای بزرگ عرضه شده بود و فروش یک
+                        میلیون دستگاه در دو ماه اول، سامسونگ را مجاب کرد که هر سال مدل جدیدی را عرضه کند. در کمتر از
+                        یک سال، فروش گلکسی نوت به 10 میلیون دستگاه رسید.حال نزدیک به 9 سال بعد و در شرایطی که
+                        سامسونگ تمام آزمون‌وخطاهای ممکن را روی سری نوت پیاده کرده است، به جایی رسیده‌ایم که گلکسی
+                        نوت یکی از بالغ‌ترین خانواده‌های دنیای گوشی‌های پرچم‌دار به‌شمار می‌آید.
+                        امسال ویروس کرونا تمام شرکت‌ها را مجبور کرد تا از گوشی‌های جدیدشان در رویدادهای آنلاین
+                        رونمایی کنند. سامسونگ هم به ناچار روند مشابهی را پیش گرفت و درکنار تبلت‌ها و ساعت‌های جدیدش،
+                        سری جدید گلکسی نوت را در دو مدل گلکسی نوت 20 و گلکسی نوت 20 اولترا معرفی کرد.
+                        پسوند «اولترا» که با خانواده‌ی گلکسی S20 به گوشی‌های سامسونگ اضافه شد به مدل‌های ممتازی
+                        اشاره می‌کند که سرآمد تمام محصولات این شرکت هستند. گلکسی نوت 20 اولترا شباهت‌های بسیاری به
+                        گلکسی اس 20 اولترا دارد و برپایه‌ی همان گوشی ساخته شده است. مدل‌های اولترا قابلیت‌های
+                        ویژه‌ای ارائه می‌دهند که معمولا با محصولات دیگر سامسونگ دردسترس نیستند؛ البته این امکانات و
+                        قابلیت‌ها به کره‌ای‌ها اجازه می‌دهد که برای مدل‌‌های اولترا برچسب قیمتی نجومی درنظر بگیرد.
+                        <span class="more fal fa-chevron-down">مشاهده بیشتر</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="secCheapStore">
+            <a href="#" class="itemCheapStoreADS" style="background-image: url(/dist/img/CheapStoreADS.jpg);">
+                <img src="/dist/img/CheapStoreADS.jpg" alt="آرزانسرای هومکیتور">
+            </a>
+        </section>
+        <section class="windowProd">
+            <div class="col1">
+                <a href="#" class="itemWinProduct" style="background-image: url(/dist/img/b1.jpg);">
+                    <img src="/dist/img/b1.jpg" alt="عنوان تصویر">
+                </a>
+                <a href="#" class="itemWinProduct" style="background-image: url(/dist/img/b2.jpg);">
+                    <img src="/dist/img/b2.jpg" alt="عنوان تصویر">
+                </a>
+            </div>
+            <div class="col2">
+
+                <a href="#" class="itemWinProduct" style="background-image: url(/dist/img/b3.jpg);">
+                    <img src="/dist/img/b3.jpg" alt="عنوان تصویر">
+                </a>
+
+                <a href="#" class="itemWinProduct" style="background-image: url(/dist/img/b4.jpg);">
+                    <img src="/dist/img/b4.jpg" alt="عنوان تصویر">
+                </a>
+            </div>
+        </section>
+        <section class="sliderListProd">
+            <div class="SliderSingle swiper-container">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <a href="#" class="sliderListProd" style="background-image: url(/dist/img/slide-1.jpg);"></a>
+                    </div>
+                    <div class="swiper-slide">
+                        <a href="#" class="sliderListProd" style="background-image: url(/dist/img/slide-2.jpg);"></a>
+                    </div>
+                </div>
+                <!-- Add Arrows -->
+                <div class="NextPrevSlider">
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>

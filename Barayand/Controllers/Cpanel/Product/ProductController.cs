@@ -197,7 +197,12 @@ namespace Barayand.Controllers.Cpanel.Product
                                     cid = c.C_Id,
                                     color = c.C_Title,
                                     price = combine.X_Price.ToString("#,#"),
-                                    discount = combine.X_Discount
+                                    discount = combine.X_Discount,
+                                    sdate=new string[] { },
+                                    stime="",
+                                    etime = "",
+                                    status = true,
+                                    showinindex = true
                                 });
                                 i++;
                             }

@@ -1509,6 +1509,9 @@ namespace Barayand.DAL.Migrations
                     b.Property<string>("P_DownloadLink")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("P_EnTitle")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("P_EndLevelCatId")
                         .HasColumnType("int");
 
@@ -1694,11 +1697,23 @@ namespace Barayand.DAL.Migrations
                     b.Property<decimal>("X_DiscountedPrice")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<DateTime>("X_EndDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("X_ProdId")
                         .HasColumnType("int");
 
                     b.Property<int>("X_SectionId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("X_ShowInIndex")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("X_StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("X_Status")
+                        .HasColumnType("bit");
 
                     b.Property<int>("X_WarrantyId")
                         .HasColumnType("int");

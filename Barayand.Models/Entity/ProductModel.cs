@@ -22,6 +22,7 @@ namespace Barayand.Models.Entity
         public int P_MCuntryId { get; set; } = 0;//manufacturing cuntry code
         public int P_EnergyId { get; set; } = 0;
         public string P_Title { get; set; }
+        public string P_EnTitle { get; set; }
         public int ManualRate { get; set; } = 0;//admin set manual rate for product
         public string P_DetailsTitle { get; set; }
         public string P_DetailsSubTitle { get; set; }

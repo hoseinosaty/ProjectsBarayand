@@ -51,7 +51,13 @@ namespace Barayand.DAL.Repositories
         {
             try
             {
-                    entity.P_Code = entity.P_Code + DateTime.Now.ToString("yyyyMMddHHmmss");
+                var getProdsByCats = this._context.Product.Where(x=>x.P_MainCatId == entity.P_MainCatId && x.P_EndLevelCatId == entity.P_EndLevelCatId).ToList();
+                int Seed = 1;
+                if(getProdsByCats.Count() > 0)
+                {
+                    Seed = getProdsByCats.Max(x => x.P_Id) + 1;
+                }
+                    entity.P_Code ="HKO"+ entity.P_MainCatId +""+ entity.P_EndLevelCatId + ""+entity.P_BrandId+"0" +Seed;
                     this._context.Product.Add(entity);
                     await this.CommitAllChanges();
                     //Product Atrribute And Answer Registration

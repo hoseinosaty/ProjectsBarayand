@@ -1,0 +1,52 @@
+[
+  {
+    "outputFileName": "wwwroot/css/style.min.css",
+    "inputFiles": [
+      //"wwwroot/css/style.css",
+      //"wwwroot/css/all.css",
+      //"wwwroot/css/animate.css",
+      //"wwwroot/css/fonts.css",
+      //"wwwroot/css/fiveStar.css",
+      //"wwwroot/css/footer.css",
+      //"wwwroot/css/jquery.mCustomScrollbar.css",
+      //"wwwroot/css/loadingSvg.css",
+      //"wwwroot/css/mapbox.css",
+      //"wwwroot/css/navbar.css",
+      //"wwwroot/css/nouislider.css",
+      //"wwwroot/css/GalleryPopUp.css",
+      //"wwwroot/css/swiper.css",
+      //"wwwroot/css/checkBox.css",
+      //"wwwroot/css/basket.css",
+      //"wwwroot/css/lib/cropper/croppie.css",
+
+      //"wwwroot/css/owl.carousel.min.css",
+      //"wwwroot/css/buttons.dataTables.min.css",
+      //"wwwroot/css/colReorder.dataTables.min.css",
+      //"wwwroot/css/editor.dataTables.min.css",
+      //"wwwroot/css/jquery.dataTables.min.css",
+      //"wwwroot/css/select.dataTables.min.css",
+      //"wwwroot/css/responsive.css"
+
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/script.min.js",
+    "inputFiles": [
+      //"wwwroot/dist/js/jquery-3.2.1.min.js",
+      //"wwwroot/dist/js/jquery.mCustomScrollbar.concat.min.js",
+      //"wwwroot/dist/js/hrb_notify.js",
+      //"wwwroot/dist/js/fivestar.js",
+      //"wwwroot/dist/js/swiper.js",
+      //"wwwroot/dist/js/nouislider.js",
+      //"wwwroot/dist/js/script.js",
+      //"wwwroot/lib/axios.min.js",
+      //"wwwroot/lib/sweetalert.js",
+      //"wwwroot/script/MainAjax.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  }
+]

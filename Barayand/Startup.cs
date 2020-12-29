@@ -136,24 +136,7 @@ namespace Barayand
             services.AddScoped(typeof(IProductManualRepository), typeof(ProductManualRepository));
             services.AddScoped(typeof(IExpertReviewRepository), typeof(ExpertReviewRespository));
             services.AddScoped(typeof(IPromotionBoxProdRepository), typeof(PromotionBoxProdRepository));
-            //services.AddScoped<IGenericRepository<Barayand.Models.Entity.ColorModel>,
-            //    ColorRepository>();
-            //services.AddScoped<IGenericRepository<Barayand.Models.Entity.AttributeModel>,
-            //    AttributeRepository>();
-            //services.AddScoped<IGenericRepository<Barayand.Models.Entity.WarrantyModel>,
-            //    WarrantyRepository>();
-            //services.AddScoped<IGenericRepository<Barayand.Models.Entity.BrandModel>,
-            //    BrandRepository>();
-            //services.AddScoped<IGenericRepository<Barayand.Models.Entity.ProductLabelModel>,
-            //    ProductLabelRepository>();
-            //services.AddScoped<IGenericRepository<Barayand.Models.Entity.CatAttrRelationModel>,
-            //    CatAttrRelationRepository>();
-            //services.AddScoped<IGenericRepository<Barayand.Models.Entity.AttrAnswerModel>,
-            //    AttributeAnswer>();
-            //services.AddScoped<IGenericRepository<Barayand.Models.Entity.DynamicPagesContent>,
-            //    DynamicPagesRepository>();
-            //services.AddScoped<IGenericRepository<Barayand.Models.Entity.GalleryCategoryModel>,
-            //    GalleryCatRepository>();
+
             #endregion
             services.AddMvc().AddNewtonsoftJson();
             services.AddControllers();
