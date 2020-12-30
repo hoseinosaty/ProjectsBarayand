@@ -13,6 +13,9 @@ namespace Barayand.OutModels.Models
         public int X_ColorId { get; set; } = 0;
         public int X_WarrantyId { get; set; } = 0;
         public decimal X_DiscountedPrice { get; set; } = 0;
+        public bool X_DiscountType { get; set; } = false; // false=>percentage true=>price after reduce discount
+
+
         public string X_SD { get; set; }
         public string X_ED { get; set; }
         public DateTime X_StartDate { get { return ConvertDatetime(X_SD); } set { X_StartDate = value; } }//استفاده فقط در فروش ویژه

@@ -12,6 +12,6 @@ namespace Barayand.DAL.Interfaces
     {
         Task<ResponseStructure> UpdateRelation(List<PromotionBoxProductsModel> data);
         Task<ResponseStructure> GetAllRelation(Miscellaneous data);
-
+        Task<PromotionBoxProductsModel> CheckProductEixstsInBoxs(int pid);
     }
 }

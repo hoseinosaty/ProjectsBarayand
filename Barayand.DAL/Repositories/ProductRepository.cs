@@ -16,10 +16,13 @@ namespace Barayand.DAL.Repositories
     {
         private readonly BarayandContext _context;
         private readonly IPCRepository _pCRepository;
-        public ProductRepository(BarayandContext context,IPCRepository pCRepository) : base(context)
+        private readonly IPCalcRepository _priceCalculator;
+      
+        public ProductRepository(BarayandContext context,IPCRepository pCRepository, IPCalcRepository priceCalculator) : base(context)
         {
             this._context = context;
             this._pCRepository = pCRepository;
+            _priceCalculator = priceCalculator;
         }
         public async Task<ResponseStructure> LogicalAvailable(object id, bool newState)
         {
@@ -256,11 +259,9 @@ namespace Barayand.DAL.Repositories
                             }
                         }
                         AvlCount += combine.X_AvailableCount;
-                        if (combine.X_Default)
-                        {
-                            AllProducts.DefaultProductCombine = combine;
-                        }
+                            
                     }
+                    AllProducts.DefaultProductCombine = await _priceCalculator.CalculateProductPrice(int.Parse(id.ToString())) ;
                     if (AvlCount > 0)
                     {
                         AllProducts.Warranties = warranties;
@@ -417,11 +418,8 @@ namespace Barayand.DAL.Repositories
                                 }
                             }
                             AvlCount += combine.X_AvailableCount;
-                            if (combine.X_Default)
-                            {
-                                item.DefaultProductCombine = combine;
-                            }
                         }
+                        item.DefaultProductCombine = await _priceCalculator.CalculateProductPrice(item.P_Id);
                         if (AvlCount > 0)
                         {
                             item.Warranties = warranties;

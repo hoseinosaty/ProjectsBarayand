@@ -6,10 +6,11 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Barayand.Services.Interfaces
+namespace Barayand.DAL.Interfaces
 {
-    public interface IPriceCalculatorService
+    public interface IPCalcRepository
     {
-        Task<PriceModel> CalculateBookPrice(int pid, string lang);
+        //Task<PriceModel> CalculateBookPrice(int pid,string lang);
+        Task<ProductCombineModel> CalculateProductPrice(int pid);
     }
 }

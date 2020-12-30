@@ -83,6 +83,7 @@ namespace Barayand
             #region Add Services
             services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
             services.AddScoped(typeof(IAttributeAnswerRepository),typeof(AttributeAnswerRepository));
+            
             services.AddScoped(typeof(IPCRepository),typeof(PCRepository));
             services.AddScoped(typeof(IPRRepository),typeof(RelationProductRepository));
             services.AddScoped(typeof(IPerfectProductRepository),typeof(PerfectProductRepository));
@@ -136,6 +137,7 @@ namespace Barayand
             services.AddScoped(typeof(IProductManualRepository), typeof(ProductManualRepository));
             services.AddScoped(typeof(IExpertReviewRepository), typeof(ExpertReviewRespository));
             services.AddScoped(typeof(IPromotionBoxProdRepository), typeof(PromotionBoxProdRepository));
+            services.AddScoped(typeof(IPCalcRepository), typeof(PCalcRepository));
 
             #endregion
             services.AddMvc().AddNewtonsoftJson();

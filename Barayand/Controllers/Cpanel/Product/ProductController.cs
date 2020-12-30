@@ -202,7 +202,8 @@ namespace Barayand.Controllers.Cpanel.Product
                                     stime="",
                                     etime = "",
                                     status = true,
-                                    showinindex = true
+                                    showinindex = true,
+                                    discounttype=true
                                 });
                                 i++;
                             }

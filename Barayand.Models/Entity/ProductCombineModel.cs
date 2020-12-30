@@ -1,4 +1,5 @@
 ﻿using Barayand.Models.Extra;
+using Barayand.Models.RuntimeModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -47,5 +48,7 @@ namespace Barayand.Models.Entity
                 return 0;
             }
         }
+        [NotMapped]
+        public ProductCombinePriceModel PriceModel { get; set; } = new ProductCombinePriceModel();
     }
 }

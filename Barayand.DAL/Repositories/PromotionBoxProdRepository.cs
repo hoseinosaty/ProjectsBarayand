@@ -20,6 +20,18 @@ namespace Barayand.DAL.Repositories
             this._context = context;
         }
 
+        public async Task<PromotionBoxProductsModel> CheckProductEixstsInBoxs(int pid)
+        {
+            try
+            {
+                var allRelations = await this._context.PromotionBoxProducts.FirstOrDefaultAsync(x => x.X_ProdId == pid);
+                return allRelations;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
 
         public async Task<ResponseStructure> GetAllRelation(Miscellaneous data)
         {
@@ -43,6 +55,14 @@ namespace Barayand.DAL.Repositories
                     return ResponseModel.Error("Relation not found");
                 }
                 var rel = this._context.PromotionBoxProducts.ToList();
+                foreach (var item in data)
+                {
+                    var existsInOtherBoxs = rel.FirstOrDefault(x=>x.X_WarrantyId == item.X_WarrantyId && x.X_ColorId == item.X_ColorId && x.X_SectionId != item.X_SectionId && item.X_ProdId == item.X_ProdId);
+                    if(existsInOtherBoxs != null)
+                    {
+                        data.Remove(item);
+                    }
+                }
                 this._context.PromotionBoxProducts.RemoveRange(rel.Where(x => x.X_SectionId == data.FirstOrDefault().X_SectionId).ToList());
                 await this.CommitAllChanges();
                 await this._context.PromotionBoxProducts.AddRangeAsync(data);
