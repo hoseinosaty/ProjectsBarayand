@@ -4,14 +4,16 @@ using Barayand.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Barayand.DAL.Migrations
 {
     [DbContext(typeof(BarayandContext))]
-    partial class BarayandContextModelSnapshot : ModelSnapshot
+    [Migration("20210104071020_AddColorFieldToPromotionBoxTable")]
+    partial class AddColorFieldToPromotionBoxTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1015,8 +1017,8 @@ namespace Barayand.DAL.Migrations
                     b.Property<bool>("N_IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("N_IsSlideShow")
-                        .HasColumnType("int");
+                    b.Property<bool>("N_IsSlideShow")
+                        .HasColumnType("bit");
 
                     b.Property<string>("N_Media")
                         .HasColumnType("nvarchar(4000)")

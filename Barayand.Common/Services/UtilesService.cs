@@ -78,6 +78,8 @@ namespace Barayand.Common.Services
                     return host + "api/fm/dl/ELOGO/NONE/";
                 case "ProductMainImage":
                     return host+ "api/fm/dl/ELOGO/PRDIMG/";
+                case "Content":
+                    return host+ "api/fm/dl/ELOGO/CONTENT/";
                 case "ProductVideo":
                     return host + "api/fm/dl/DIGITALPRD/NONE/";
                 case "ProductCatMainImage":

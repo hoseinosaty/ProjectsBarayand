@@ -21,6 +21,7 @@ namespace Barayand.Models.Entity
         public int B_SectionId { get; set; } = 1;
         public int B_LoadType { get; set; } = 1;//Type of box type 1=>Product List 2=>Link
         public int B_Type { get; set; } = 1;//1=>Image Box(Box haye tasviri) 2=>Movable Box(box hayeh moteharek) 3=>Category Discount boxs(box haye takhfifi dasteh bandi)        
+        public string B_ColorCode { get; set; } = "#0046bf";
         [NotMapped]
         public List<ProductModel> Products { get; set; } = new List<ProductModel>();
 

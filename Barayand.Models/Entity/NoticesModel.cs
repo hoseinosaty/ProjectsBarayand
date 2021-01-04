@@ -36,7 +36,7 @@ namespace Barayand.Models.Entity
         public string N_Content { get; set; }
         public string N_BannerImage { get; set; } = "noimage.png";
 
-        public bool N_IsSlideShow { get; set; } = false;
+        public int N_IsSlideShow { get; set; } = 1;//1=>normal 2=>type 2 3=>is slider
         public bool N_IsDeleted { get; set; } = false;
         public string N_Url { get; set; }
         public string N_Attachment { get; set; }// if file type is Articles this field will be filled as article attachment file

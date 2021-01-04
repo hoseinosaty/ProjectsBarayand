@@ -25,13 +25,14 @@ namespace Barayand.DAL.Repositories
 
 
 
-        public PCalcRepository(IPublicMethodRepsoitory<FormulaModel> formularepo, IPublicMethodRepsoitory<CopponModel> couponrepo, ILogger<PCalcRepository> logger, IPromotionBoxProdRepository boxProdRepository, IPublicMethodRepsoitory<ProductCombineModel> combinemodel)
+        public PCalcRepository(IPublicMethodRepsoitory<FormulaModel> formularepo, IPublicMethodRepsoitory<CopponModel> couponrepo, ILogger<PCalcRepository> logger, IPromotionBoxProdRepository boxProdRepository, IPublicMethodRepsoitory<ProductCombineModel> combinemodel, IFestivalRepository festivalRepository)
         {
             this._formularepo = formularepo;
             this._couponrepo = couponrepo;
             this._logger = logger;
             this._boxProdRepository = boxProdRepository;
             this._combinerepo = combinemodel;
+            this._festrepo = festivalRepository;
         }
 
         public async Task<ProductCombineModel> CalculateProductPrice(int pid, int EndLevelCatId = 0)

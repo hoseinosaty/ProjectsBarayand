@@ -19,6 +19,9 @@ namespace Barayand.OutModels.Models
         public string N_Image { get; set; }
         public string N_Seo { get; set; }
         public string N_Media { get; set; }
+        public string N_BannerImage { get; set; } = "noimage.png";
+        public int N_IsSlideShow { get; set; } = 1;//1=>normal 2=>type 2 3=>is slider
+
         public int N_MediaType { get; set; } = 1;//1 => Video 2 => ImageGallery
         public string N_Summary { get; set; }
         public string N_Content { get; set; }
