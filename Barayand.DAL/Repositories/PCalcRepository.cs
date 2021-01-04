@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Barayand.DAL.Repositories
@@ -19,7 +20,10 @@ namespace Barayand.DAL.Repositories
         private readonly IPromotionBoxProdRepository _boxProdRepository;
         private readonly IPublicMethodRepsoitory<FormulaModel> _formularepo;
         private readonly IPublicMethodRepsoitory<CopponModel> _couponrepo;
+        private readonly IFestivalRepository _festrepo;
         private readonly ILogger<PCalcRepository> _logger;
+
+
 
         public PCalcRepository(IPublicMethodRepsoitory<FormulaModel> formularepo, IPublicMethodRepsoitory<CopponModel> couponrepo, ILogger<PCalcRepository> logger, IPromotionBoxProdRepository boxProdRepository, IPublicMethodRepsoitory<ProductCombineModel> combinemodel)
         {
@@ -30,13 +34,17 @@ namespace Barayand.DAL.Repositories
             this._combinerepo = combinemodel;
         }
 
-        public async Task<ProductCombineModel> CalculateProductPrice(int pid)
+        public async Task<ProductCombineModel> CalculateProductPrice(int pid, int EndLevelCatId = 0)
         {
+            Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en");
+
             ProductCombineModel ProductCombine = new ProductCombineModel();
             try
             {
                 ProductCombinePriceModel PriceModel = new ProductCombinePriceModel();
+                List<FestivalOfferModel> AllFestivalRepo = ((List<FestivalOfferModel>)(await _festrepo.GetAll()).Data);
                 var existsInBox = await _boxProdRepository.CheckProductEixstsInBoxs(pid);
+
                 //product exists in boxs
                 if (existsInBox != null)
                 {
@@ -88,6 +96,18 @@ namespace Barayand.DAL.Repositories
                         }
                     }
                 }
+                else if (AllFestivalRepo.Count(x => x.F_Type == 1 && x.F_Status) > 0)
+                {
+                    var fest = AllFestivalRepo.FirstOrDefault(x => x.F_Type == 1);
+                    var defaultCombine = await CalculateDefaultCombine(pid);
+                    return await CalculateDefaultCombine(pid,fest.F_Discount);
+                }
+                else if(EndLevelCatId != 0 && AllFestivalRepo.Count(x=>x.F_Type == 2 && x.F_Status && x.F_EndLevelCategoryId == EndLevelCatId) > 0)
+                {
+                    var fest = AllFestivalRepo.FirstOrDefault(x => x.F_Type == 2 && x.F_Status && x.F_EndLevelCategoryId == EndLevelCatId);
+                    var defaultCombine = await CalculateDefaultCombine(pid);
+                    return await CalculateDefaultCombine(pid, fest.F_Discount);
+                }
                 else
                 {
                     return await CalculateDefaultCombine(pid);
@@ -100,7 +120,7 @@ namespace Barayand.DAL.Repositories
                 return ProductCombine;
             }
         }
-        private async Task<ProductCombineModel> CalculateDefaultCombine(int pid)
+        private async Task<ProductCombineModel> CalculateDefaultCombine(int pid,decimal discount = 0)
         {
             ProductCombineModel ProductCombine = new ProductCombineModel();
             try
@@ -115,6 +135,11 @@ namespace Barayand.DAL.Repositories
                     {
                         ProductCombine = defaultCombine;
                         PriceModel.Price = defaultCombine.X_Price;
+                        if(discount != 0)
+                        {
+                            defaultCombine.X_Discount = discount;
+                            defaultCombine.X_DiscountType = 1;
+                        }
                         if (defaultCombine.X_Discount > 0)//has discount
                         {
                             PriceModel.HasDiscount = true;

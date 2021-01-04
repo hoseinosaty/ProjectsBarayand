@@ -4,14 +4,16 @@ using Barayand.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Barayand.DAL.Migrations
 {
     [DbContext(typeof(BarayandContext))]
-    partial class BarayandContextModelSnapshot : ModelSnapshot
+    [Migration("20210102123623_AddAvailableFieldsToFestivalTable")]
+    partial class AddAvailableFieldsToFestivalTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -995,9 +997,6 @@ namespace Barayand.DAL.Migrations
                     b.Property<string>("N_Attachment")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("N_BannerImage")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("N_CId")
                         .HasColumnType("int");
 
@@ -1013,9 +1012,6 @@ namespace Barayand.DAL.Migrations
                         .HasMaxLength(1000);
 
                     b.Property<bool>("N_IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("N_IsSlideShow")
                         .HasColumnType("bit");
 
                     b.Property<string>("N_Media")

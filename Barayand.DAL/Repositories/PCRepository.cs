@@ -68,7 +68,7 @@ namespace Barayand.DAL.Repositories
         {
             try
             {
-                List<ProductCategoryModel> data = await Task.Run(() => this._context.ProductCategory.Where(x=>x.PC_IsDeleted == false).ToList());
+                List<ProductCategoryModel> data = this._context.ProductCategory.Where(x=>x.PC_IsDeleted == false).ToList();
                 foreach(var item in data)
                 {
                     string ParentTitle = "****";

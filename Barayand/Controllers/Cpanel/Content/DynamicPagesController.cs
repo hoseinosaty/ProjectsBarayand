@@ -25,9 +25,10 @@ namespace Barayand.Controllers.Cpanel.Content
         private readonly IPublicMethodRepsoitory<IndexBoxProductRelModel> _indexsectionrepo;
         private readonly IPublicMethodRepsoitory<IndexBoxInfoModel> _indexboxinforepo;
         private readonly IPublicMethodRepsoitory<ProductModel> _productrepo;
+        private readonly IPublicMethodRepsoitory<ServiceModel> _servicerepo;
 
 
-        public DynamicPagesController(IMapper mapper, IPublicMethodRepsoitory<DynamicPagesContent> repository, IPublicMethodRepsoitory<SocialMediaTitlesModel> socialrepository, IPublicMethodRepsoitory<DepartmentModel> departmentrepo, IPublicMethodRepsoitory<IndexBoxProductRelModel> indexboxrepo, IPublicMethodRepsoitory<IndexBoxInfoModel> indexboxinforepo, IPublicMethodRepsoitory<ProductModel> productrepo)
+        public DynamicPagesController(IMapper mapper, IPublicMethodRepsoitory<DynamicPagesContent> repository, IPublicMethodRepsoitory<SocialMediaTitlesModel> socialrepository, IPublicMethodRepsoitory<DepartmentModel> departmentrepo, IPublicMethodRepsoitory<IndexBoxProductRelModel> indexboxrepo, IPublicMethodRepsoitory<IndexBoxInfoModel> indexboxinforepo, IPublicMethodRepsoitory<ProductModel> productrepo, IPublicMethodRepsoitory<ServiceModel> servicerepo)
         {
             this._repository = repository;
             this._socialrepository = socialrepository;
@@ -36,6 +37,7 @@ namespace Barayand.Controllers.Cpanel.Content
             this._indexsectionrepo = indexboxrepo;
             this._indexboxinforepo = indexboxinforepo;
             this._productrepo = productrepo;
+            this._servicerepo = servicerepo;
         }
 
         [Route("AddPageContent")]
@@ -237,6 +239,87 @@ namespace Barayand.Controllers.Cpanel.Content
             catch(Exception ex)
             {
                 return new JsonResult(ResponseModel.ServerInternalError(data:ex));
+            }
+        }
+        //
+        // services and profits
+        [HttpPost]
+        [Route("AddService")]
+        public async Task<ActionResult> AddService(ServiceModel service)
+        {
+            try
+            {
+                return new JsonResult(await _servicerepo.Insert(service));
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        [HttpPost]
+        [Route("UpdateService")]
+        public async Task<ActionResult> UpdateService(ServiceModel dp)
+        {
+            try
+            {
+                return new JsonResult(await _servicerepo.Update(dp));
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        [HttpPost]
+        [Route("ActiveService")]
+        public async Task<ActionResult> ActiveService(ServiceModel service)
+        {
+            try
+            {
+                return new JsonResult(await _servicerepo.LogicalAvailable(service.S_Id,true));
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        [HttpPost]
+        [Route("DisableService")]
+        public async Task<ActionResult> DisableService(ServiceModel service)
+        {
+            try
+            {
+                return new JsonResult(await _servicerepo.LogicalAvailable(service.S_Id,false));
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        [HttpPost]
+        [Route("DeleteService")]
+        public async Task<ActionResult> DeleteService(ServiceModel service)
+        {
+            try
+            {
+                return new JsonResult(await _servicerepo.Delete(service.S_Id));
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        [HttpPost]
+        [Route("LoadServices/{type}")]
+        public async Task<ActionResult> LoadServices(int type = 1)
+        {
+            try
+            {
+                var deps = ((List<ServiceModel>)(await _servicerepo.GetAll()).Data).Where(x => x.S_Type == type).ToList();
+                return new JsonResult(ResponseModel.Success(data: deps));
+            }
+            catch (Exception ex)
+            {
+                return null;
             }
         }
         //

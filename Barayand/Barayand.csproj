@@ -41,6 +41,9 @@
     <None Update="App_Data\Data\Upload\Media\EntityLogo\BrandLogo\noimage.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="App_Data\Data\Upload\Media\EntityLogo\Content\noimage.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="App_Data\Data\Upload\Media\EntityLogo\GalleryCatImg\noimage.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

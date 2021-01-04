@@ -55,6 +55,10 @@ namespace Barayand.Controllers.Cpanel.Product
             try
             {
                 ProductCategoryModel pcm = (ProductCategoryModel)_mapper.Map<OutModels.Models.ProductCat, ProductCategoryModel>(cat);
+                if(pcm.PC_Id == pcm.PC_ParentId)
+                {
+                    return new JsonResult(ResponseModel.Error("دسته بندی جاری نمیتوانند زیر مجموعه خودش قرار بگیرد"));
+                }
                 return new JsonResult(await this._repository.Update(pcm));
             }
             catch (Exception ex)

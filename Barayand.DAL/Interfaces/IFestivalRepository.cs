@@ -3,14 +3,13 @@ using Barayand.OutModels.Miscellaneous;
 using Barayand.OutModels.Response;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Barayand.DAL.Interfaces
 {
-    public interface IPCalcRepository
+    public interface IFestivalRepository:IPublicMethodRepsoitory<FestivalOfferModel>
     {
-        //Task<PriceModel> CalculateBookPrice(int pid,string lang);
-        Task<ProductCombineModel> CalculateProductPrice(int pid,int EndLevelCatId = 0);
+        public Task<ResponseStructure> InsertCollation(FestivalCreationModel data);
     }
 }

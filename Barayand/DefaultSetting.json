@@ -1,6 +1,7 @@
 {
   "BASEMEDIAROOT": "\\App_Data\\Data\\Upload\\Media\\",
   "BASEENTITYLOGO": "EntityLogo\\",
+ 
   "BASESEOIMAGE": "Seo\\",
   "GALLERY": "Gallery\\",
   "NOTICES": "NoticeImage\\",
@@ -29,6 +30,7 @@
     "NEWSIMAGE": "News\\",
     "NEWSMEDIA": "News\\",
     "PROFILE": "Profile\\",
-    "SECTION": "Sections\\"
+    "SECTION": "Sections\\",
+    "CONTENT": "Content\\"
   }
 }

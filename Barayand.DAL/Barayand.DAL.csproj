@@ -7,6 +7,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20201117102006_EditInvoiceTableForGbook.cs" />
     <Compile Remove="Migrations\20201117102006_EditInvoiceTableForGbook.Designer.cs" />
+    <Compile Remove="Migrations\20201230080118_AddFestivalOfferTable.cs" />
+    <Compile Remove="Migrations\20201230080118_AddFestivalOfferTable.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

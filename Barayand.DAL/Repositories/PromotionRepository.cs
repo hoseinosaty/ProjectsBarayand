@@ -14,19 +14,32 @@ namespace Barayand.DAL.Repositories
     public class PromotionRepository : GenericRepository<PromotionBoxModel>, IPromotionRepository
     {
         private readonly BarayandContext _context;
-        public PromotionRepository(BarayandContext context) : base(context)
+        private readonly IPublicMethodRepsoitory<ProductModel> _productrepo;
+        public PromotionRepository(BarayandContext context, IPublicMethodRepsoitory<ProductModel> productrepo) : base(context)
         {
             _context = context;
+            _productrepo = productrepo;
         }
 
         public async Task<List<PromotionBoxModel>> GetByType(int Type)
         {
             try
             {
-                var AllPromotions = ((List<PromotionBoxModel>)(await GetAll()).Data).Where(x=>x.B_Type == Type).ToList();
+                var AllPromotions = ((List<PromotionBoxModel>)(await GetAll()).Data).Where(x => x.B_Type == Type).ToList();
+                foreach (var box in AllPromotions)
+                {
+                    foreach (var item in _context.PromotionBoxProducts.Where(x => x.X_SectionId == box.B_SectionId))
+                    {
+                        var p = await _productrepo.GetById(item.X_ProdId);
+                        if (p != null)
+                        {
+                            box.Products.Add(p);
+                        }
+                    }
+                }
                 return AllPromotions;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return null;
             }
@@ -36,6 +49,14 @@ namespace Barayand.DAL.Repositories
             try
             {
                 var AllPromotions = ((List<PromotionBoxModel>)(await GetAll()).Data).FirstOrDefault(x => x.B_SectionId == Secid);
+                foreach (var item in _context.PromotionBoxProducts.Where(x => x.X_SectionId == Secid))
+                {
+                    var p = await _productrepo.GetById(item.X_ProdId);
+                    if (p != null)
+                    {
+                        AllPromotions.Products.Add(p);
+                    }
+                }
                 return AllPromotions;
             }
             catch (Exception ex)

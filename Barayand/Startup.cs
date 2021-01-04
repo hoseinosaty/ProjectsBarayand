@@ -76,6 +76,7 @@ namespace Barayand
                 mc.AddProfile(new Common.MapperProfiles.ProductManualProfile());
                 mc.AddProfile(new Common.MapperProfiles.PromotionBoxProfiler());
                 mc.AddProfile(new Common.MapperProfiles.PromotionBoxProductProfiler());
+                mc.AddProfile(new Common.MapperProfiles.FestivalProfiler());
             });
             IMapper mapper = MapperConfiguration.CreateMapper();
             services.AddSingleton(mapper);
@@ -93,6 +94,7 @@ namespace Barayand
             services.AddScoped(typeof(IFormulaRepository), typeof(FormulaRepository));
             services.AddScoped(typeof(ICommentRepository), typeof(CommentRepository));
             services.AddScoped(typeof(IPromotionRepository), typeof(PromotionRepository));
+            services.AddScoped(typeof(IFestivalRepository), typeof(FestivalRepository));
             services.AddScoped(typeof(IFileAccessService), typeof(Barayand.Services.Services.FileAccessSerivce));
             services.AddScoped(typeof(ISmsService), typeof(Barayand.Services.Services.SmsService));
             services.AddScoped(typeof(IPublicMethodRepsoitory<GalleryCategoryModel>),typeof(GalleryCatRepository));
@@ -132,6 +134,7 @@ namespace Barayand
             services.AddScoped(typeof(IPublicMethodRepsoitory<OptionsModel>), typeof(OptionRepository));
             services.AddScoped(typeof(IPublicMethodRepsoitory<TicketModel>), typeof(TicketRepository));
             services.AddScoped(typeof(IPublicMethodRepsoitory<ManufacturContryModel>), typeof(ManufacturCuntryRepsitory));
+            services.AddScoped(typeof(IPublicMethodRepsoitory<ServiceModel>), typeof(ServiceProfitsRepository));
             services.AddScoped(typeof(IPublicMethodRepsoitory<EnergyUsageModel>), typeof(EnergyGiftWrapRepository));
             services.AddScoped(typeof(IPublicMethodRepsoitory<ProductCombineModel>), typeof(ProductCombineRepository));
             services.AddScoped(typeof(IProductManualRepository), typeof(ProductManualRepository));

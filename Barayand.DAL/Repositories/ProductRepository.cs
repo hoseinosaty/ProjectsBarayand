@@ -261,7 +261,7 @@ namespace Barayand.DAL.Repositories
                         AvlCount += combine.X_AvailableCount;
                             
                     }
-                    AllProducts.DefaultProductCombine = await _priceCalculator.CalculateProductPrice(int.Parse(id.ToString())) ;
+                    AllProducts.DefaultProductCombine = await _priceCalculator.CalculateProductPrice(int.Parse(id.ToString()),AllProducts.P_EndLevelCatId) ;
                     if (AvlCount > 0)
                     {
                         AllProducts.Warranties = warranties;
@@ -419,7 +419,7 @@ namespace Barayand.DAL.Repositories
                             }
                             AvlCount += combine.X_AvailableCount;
                         }
-                        item.DefaultProductCombine = await _priceCalculator.CalculateProductPrice(item.P_Id);
+                        item.DefaultProductCombine = await _priceCalculator.CalculateProductPrice(item.P_Id, item.P_EndLevelCatId);
                         if (AvlCount > 0)
                         {
                             item.Warranties = warranties;

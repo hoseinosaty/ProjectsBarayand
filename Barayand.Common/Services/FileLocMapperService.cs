@@ -27,6 +27,9 @@ namespace Barayand.Common.Services
                     case "ELOGO":
                         FileLocation += MainSetting.SelectToken("BASEENTITYLOGO").ToString();
                         break;
+                    case "CONTENT":
+                        FileLocation += MainSetting.SelectToken("CONTENT").ToString();
+                        break;
                     case "ESEO":
                         FileLocation += MainSetting.SelectToken("BASESEOIMAGE").ToString();
                         break;
