@@ -70,6 +70,9 @@ namespace Barayand.DAL.Context
         public DbSet<ProductManualModel> ProductManual { get; set; }
         public DbSet<PromotionBoxModel> PromotionBoxs { get; set; }
         public DbSet<FestivalOfferModel> FestivalOffer { get; set; }
+        public DbSet<HeaderNotificationModel> HeaderNotifications { get; set; }
+        public DbSet<FaqCategoryModel> FaqCategories { get; set; }
+        public DbSet<FaqModel> Faq { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

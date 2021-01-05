@@ -4,14 +4,16 @@ using Barayand.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Barayand.DAL.Migrations
 {
     [DbContext(typeof(BarayandContext))]
-    partial class BarayandContextModelSnapshot : ModelSnapshot
+    [Migration("20210105102533_AddFAQTable")]
+    partial class AddFAQTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -513,9 +515,6 @@ namespace Barayand.DAL.Migrations
                     b.Property<DateTime?>("Deleted_At")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("F_IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<string>("F_Logo")
                         .HasColumnType("nvarchar(max)");
 
@@ -534,45 +533,6 @@ namespace Barayand.DAL.Migrations
                     b.HasKey("F_Id");
 
                     b.ToTable("FaqCategories");
-                });
-
-            modelBuilder.Entity("Barayand.Models.Entity.FaqModel", b =>
-                {
-                    b.Property<int>("FA_Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime?>("Created_At")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("Deleted_At")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("FA_Answer")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("FA_CatId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("FA_IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("FA_SortField")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("FA_Status")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("FA_Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("Updated_At")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("FA_Id");
-
-                    b.ToTable("Faq");
                 });
 
             modelBuilder.Entity("Barayand.Models.Entity.FavoriteModel", b =>

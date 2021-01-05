@@ -58,6 +58,11 @@ namespace Barayand.OutModels.Miscellaneous
             public int C_Id { get; set; }
             public string C_Title { get; set; }
         }
+        public class FaqCategory
+        {
+            public int F_Id { get; set; }
+            public string F_Title { get; set; }
+        }
     }
     
 }

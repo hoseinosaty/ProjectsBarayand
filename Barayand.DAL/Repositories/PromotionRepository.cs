@@ -78,6 +78,7 @@ namespace Barayand.DAL.Repositories
                     checkExists.B_Title = entity.B_Title;
                     checkExists.B_Type = entity.B_Type;
                     checkExists.B_ColorCode = entity.B_ColorCode;
+                    checkExists.B_EntityId = entity.B_EntityId;
                     checkExists.Updated_At = DateTime.Now;
                     return await this.Update(checkExists);
                 }

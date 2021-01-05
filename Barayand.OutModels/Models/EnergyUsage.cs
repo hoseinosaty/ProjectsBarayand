@@ -12,6 +12,6 @@ namespace Barayand.OutModels.Models
         public bool E_Status { get; set; } = true;
         public string E_Image { get; set; } = "noimage.png";
         public int E_Sort { get; set; } = 1;
-        public int E_Type { get; set; } = 1;//1=>EnergyUsage 2=>BoxGiftWrapper
+        public int E_Type { get; set; } = 1;//1=>EnergyUsage 2=>BoxGiftWrapper 3=>FooterLogo
     }
 }

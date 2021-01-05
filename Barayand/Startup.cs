@@ -77,6 +77,9 @@ namespace Barayand
                 mc.AddProfile(new Common.MapperProfiles.PromotionBoxProfiler());
                 mc.AddProfile(new Common.MapperProfiles.PromotionBoxProductProfiler());
                 mc.AddProfile(new Common.MapperProfiles.FestivalProfiler());
+                mc.AddProfile(new Common.MapperProfiles.HeaderNotificationProfiler());
+                mc.AddProfile(new Common.MapperProfiles.FaqCategoryProfiler());
+                mc.AddProfile(new Common.MapperProfiles.FaqProfiler());
             });
             IMapper mapper = MapperConfiguration.CreateMapper();
             services.AddSingleton(mapper);
@@ -137,6 +140,9 @@ namespace Barayand
             services.AddScoped(typeof(IPublicMethodRepsoitory<ServiceModel>), typeof(ServiceProfitsRepository));
             services.AddScoped(typeof(IPublicMethodRepsoitory<EnergyUsageModel>), typeof(EnergyGiftWrapRepository));
             services.AddScoped(typeof(IPublicMethodRepsoitory<ProductCombineModel>), typeof(ProductCombineRepository));
+            services.AddScoped(typeof(IPublicMethodRepsoitory<HeaderNotificationModel>), typeof(HeaderNotifiRepository));
+            services.AddScoped(typeof(IPublicMethodRepsoitory<FaqCategoryModel>), typeof(FaqCategoryRepository));
+            services.AddScoped(typeof(IPublicMethodRepsoitory<FaqModel>), typeof(FaqRepository));
             services.AddScoped(typeof(IProductManualRepository), typeof(ProductManualRepository));
             services.AddScoped(typeof(IExpertReviewRepository), typeof(ExpertReviewRespository));
             services.AddScoped(typeof(IPromotionBoxProdRepository), typeof(PromotionBoxProdRepository));
