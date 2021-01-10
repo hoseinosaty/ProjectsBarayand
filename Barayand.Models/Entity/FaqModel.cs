@@ -14,6 +14,8 @@ namespace Barayand.Models.Entity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int FA_Id { get; set; }
         public int FA_CatId { get; set; } = 0;
+        [NotMapped]
+        public string FA_CatTitle { get; set; }
         public string FA_Title { get; set; }
         public int FA_SortField { get; set; } = 1;
         public bool FA_Status { get; set; } = true;

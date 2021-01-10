@@ -4,14 +4,16 @@ using Barayand.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Barayand.DAL.Migrations
 {
     [DbContext(typeof(BarayandContext))]
-    partial class BarayandContextModelSnapshot : ModelSnapshot
+    [Migration("20210109113321_AddAmazingRequestTable")]
+    partial class AddAmazingRequestTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -164,45 +166,6 @@ namespace Barayand.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Authentication");
-                });
-
-            modelBuilder.Entity("Barayand.Models.Entity.BetterPriceFoundModel", b =>
-                {
-                    b.Property<int>("B_Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("B_Price")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("B_ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("B_StoreName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("B_StoreOwnCity")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("B_StoreType")
-                        .HasColumnType("int");
-
-                    b.Property<string>("B_StoreWebAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("Created_At")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("Deleted_At")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("Updated_At")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("B_Id");
-
-                    b.ToTable("BetterPriceRequest");
                 });
 
             modelBuilder.Entity("Barayand.Models.Entity.BrandModel", b =>

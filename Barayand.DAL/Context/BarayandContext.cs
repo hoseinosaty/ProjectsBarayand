@@ -73,6 +73,8 @@ namespace Barayand.DAL.Context
         public DbSet<HeaderNotificationModel> HeaderNotifications { get; set; }
         public DbSet<FaqCategoryModel> FaqCategories { get; set; }
         public DbSet<FaqModel> Faq { get; set; }
+        public DbSet<AmazingRequestModel> AmazingRequests { get; set; }
+        public DbSet<BetterPriceFoundModel> BetterPriceRequest { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

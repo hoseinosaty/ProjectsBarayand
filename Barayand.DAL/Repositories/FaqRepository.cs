@@ -18,6 +18,27 @@ namespace Barayand.DAL.Repositories
         {
             this._context = context;
         }
+        public async Task<ResponseStructure> GetAll()
+        {
+            try
+            {
+                var allFaqs = this._context.Faq.Where(x=>!x.FA_IsDeleted).ToList();
+                var allFaqCats = this._context.FaqCategories.ToList();
+                foreach(var item in allFaqs)
+                {
+                    var cat = allFaqCats.FirstOrDefault(x=>x.F_Id == item.FA_CatId);
+                    if(cat != null)
+                    {
+                        item.FA_CatTitle = cat.F_Title;
+                    }
+                }
+                return ResponseModel.Success(data: allFaqs);
+            }
+            catch (Exception ex)
+            {
+                return ResponseModel.ServerInternalError(data: ex);
+            }
+        }
         public async Task<ResponseStructure> LogicalAvailable(object id, bool newState)
         {
             try
