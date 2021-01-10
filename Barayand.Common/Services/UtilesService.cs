@@ -118,6 +118,8 @@ namespace Barayand.Common.Services
                     return host + "api/fm/dl/ELOGO/PRDBRANDIMG/";
                 case "Slider":
                     return host + "api/fm/dl/SLIDER/NONE/";
+                case "Label":
+                    return host + "api/fm/dl/ELOGO/PRDLABEL/";
             }
             return "";
         }

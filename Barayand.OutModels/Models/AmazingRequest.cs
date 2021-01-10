@@ -9,6 +9,7 @@ namespace Barayand.OutModels.Models
     {
         public int A_Id { get; set; }
         public int A_UserId { get; set; } = 0;
+        public string A_UserName { get; set; }
         public int A_ProductId { get; set; } = 0;
         public string A_ProductTitle { get; set; }
         public int A_NotificationType { get; set; } = 1;//1=>sms 2=>email 3=>both

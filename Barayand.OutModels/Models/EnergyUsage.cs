@@ -13,5 +13,6 @@ namespace Barayand.OutModels.Models
         public string E_Image { get; set; } = "noimage.png";
         public int E_Sort { get; set; } = 1;
         public int E_Type { get; set; } = 1;//1=>EnergyUsage 2=>BoxGiftWrapper 3=>FooterLogo
+        public string E_Link { get; set; }//if type == FooterLogo filled this field
     }
 }

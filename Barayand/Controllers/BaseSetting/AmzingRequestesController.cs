@@ -22,12 +22,15 @@ namespace Barayand.Controllers.BaseSetting
         private readonly IPublicMethodRepsoitory<AmazingRequestModel> _repository;
         private readonly IPublicMethodRepsoitory<ProductModel> _productrepository;
         private readonly IPublicMethodRepsoitory<BetterPriceFoundModel> _betterpricerepository;
-
-        public AmzingRequestesController(IMapper mapper, IPublicMethodRepsoitory<AmazingRequestModel> repository, IPublicMethodRepsoitory<BetterPriceFoundModel> betterpricerepo, IPublicMethodRepsoitory<ProductModel> productrepo)
+        private readonly IPublicMethodRepsoitory<ProdFeedbackModel> _prodfeedbackrepo;
+        private readonly IUserRepository _userrepository;
+        public AmzingRequestesController(IMapper mapper, IPublicMethodRepsoitory<AmazingRequestModel> repository, IPublicMethodRepsoitory<BetterPriceFoundModel> betterpricerepo, IPublicMethodRepsoitory<ProductModel> productrepo, IUserRepository userRepository, IPublicMethodRepsoitory<ProdFeedbackModel> prodfeedbackrepo)
         {
             this._repository = repository;
             this._betterpricerepository = betterpricerepo;
             this._productrepository = productrepo;
+            this._userrepository = userRepository;
+            this._prodfeedbackrepo = prodfeedbackrepo;
             this._mapper = mapper;
         }
         [Route("AddAmzingRequest")]
@@ -63,6 +66,15 @@ namespace Barayand.Controllers.BaseSetting
                     else
                     {
                         item.A_ProductTitle = "----";
+                    }
+                    var user = await _userrepository.GetById(item.A_UserId);
+                    if(user!=null)
+                    {
+                        item.A_UserName = user.U_Name + " " + user.U_Family;
+                    }
+                    else
+                    {
+                        item.A_UserName = "----";
                     }
                 }
                 return new JsonResult(ResponseModel.Success("AMAZINGREQUEST_LIST_RETURNED", result));
@@ -107,6 +119,50 @@ namespace Barayand.Controllers.BaseSetting
                     else
                     {
                         item.B_ProductTitle = "----";
+                    }
+                }
+                return new JsonResult(ResponseModel.Success("AMAZINGREQUEST_LIST_RETURNED", result));
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        //////////////////////
+        [Route("AddProductFeedback")]
+        [HttpPost]
+        public async Task<ActionResult> AddProductFeedback(OutModels.Models.ProdFeedback attribute)
+        {
+            try
+            {
+                ProdFeedbackModel am = (ProdFeedbackModel)_mapper.Map<OutModels.Models.ProdFeedback
+                    , ProdFeedbackModel>(attribute);
+                return new JsonResult(await this._prodfeedbackrepo.Insert(am));
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        [Route("LoadProductFeedback")]
+        [HttpPost]
+        public async Task<ActionResult> LoadProductFeedback()
+        {
+            try
+            {
+                var All = await this._betterpricerepository.GetAll();
+                List<ProdFeedbackModel> data = ((List<ProdFeedbackModel>)(All).Data).OrderByDescending(x => x.Created_At).ToList();
+                List<OutModels.Models.ProdFeedback> result = _mapper.Map<List<ProdFeedbackModel>, List<OutModels.Models.ProdFeedback>>(data);
+                foreach (var item in result)
+                {
+                    var prd = await _productrepository.GetById(item.F_ProductId);
+                    if (prd != null)
+                    {
+                        item.F_ProductTitle = prd.P_Title + "--" + prd.P_Code;
+                    }
+                    else
+                    {
+                        item.F_ProductTitle = "----";
                     }
                 }
                 return new JsonResult(ResponseModel.Success("AMAZINGREQUEST_LIST_RETURNED", result));

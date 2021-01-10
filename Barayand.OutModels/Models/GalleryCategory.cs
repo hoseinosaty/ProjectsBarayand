@@ -15,7 +15,7 @@ namespace Barayand.OutModels.Models
         public string GC_Description { get; set; }
         public bool GC_Status { get; set; } = true;
         public bool GC_IsDeleted { get; set; } = false;
-        public int GC_Type { get; set; } = 0;//image = 1 , video = 2 , UNKNOWN = 0
+        public int GC_Type { get; set; } = 0;//image = 1 , video = 2 ,Catalog => 3, UNKNOWN = 0
         public string Lang { get; set; } = "fa";
     }
 }

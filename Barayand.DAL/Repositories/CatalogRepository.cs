@@ -8,54 +8,74 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+
 namespace Barayand.DAL.Repositories
 {
-    public class EnergyGiftWrapRepository: GenericRepository<EnergyUsageModel>, IPublicMethodRepsoitory<EnergyUsageModel>
+    public class CatalogRepository : GenericRepository<CatalogModel>, IPublicMethodRepsoitory<CatalogModel>
     {
         private readonly BarayandContext _context;
-
-        public EnergyGiftWrapRepository(BarayandContext context) : base(context)
+        public CatalogRepository(BarayandContext context) : base(context)
         {
             this._context = context;
         }
-
+        public async Task<ResponseStructure> GetAll()
+        {
+            try
+            {
+                var All = this._context.Catalog.ToList();
+                List<CatalogModel> result = new List<CatalogModel>();
+                foreach (var item in All)
+                {
+                    var cat = this._context.GalleryCategory.FirstOrDefault(x => x.GC_Type == 3 && x.GC_Id == item.C_CatId);
+                    if (cat != null)
+                    {
+                        item.C_CatTitle = cat.GC_Titles;
+                        result.Add(item);
+                    }
+                }
+                return ResponseModel.Success(data: result);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
         public async Task<ResponseStructure> LogicalAvailable(object id, bool newState)
         {
             try
             {
                 var item = await this.GetById(id);
-                item.E_Status = newState;
+                item.C_Status = newState;
                 return await this.Update(item);
             }
             catch (Exception ex)
             {
-                return ResponseModel.ServerInternalError(data:ex);
+                return null;
             }
         }
-
         public async Task<ResponseStructure> LogicalDelete(object id)
         {
             try
             {
                 var item = await this.GetById(id);
-                item.E_IsDeleted = true;
+                //item.isd = true;
                 return await this.Update(item);
             }
             catch (Exception ex)
             {
-                return ResponseModel.ServerInternalError(data: ex);
+                return null;
             }
         }
-        public async Task<ResponseStructure> Update(EnergyUsageModel entity)
+        public async Task<ResponseStructure> Update(CatalogModel entity)
         {
             try
             {
-                var item = await this.GetById(entity.E_Id);
+                var item = await this.GetById(entity.C_Id);
                 entity.Created_At = item.Created_At;
                 entity.Updated_At = DateTime.Now;
                 this._context.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
-                this._context.EnergyUsage.Update(entity);
-                await this._context.SaveChangesAsync();
+                this._context.Catalog.Update(entity);
+                await this.CommitAllChanges();
                 return ResponseModel.Success("رکورد مورد نظر با موفقیت بروزرسانی گردید");
             }
             catch (Exception ex)
@@ -63,5 +83,6 @@ namespace Barayand.DAL.Repositories
                 return null;
             }
         }
+
     }
 }

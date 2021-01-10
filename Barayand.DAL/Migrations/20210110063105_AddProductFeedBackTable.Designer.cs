@@ -4,14 +4,16 @@ using Barayand.DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Barayand.DAL.Migrations
 {
     [DbContext(typeof(BarayandContext))]
-    partial class BarayandContextModelSnapshot : ModelSnapshot
+    [Migration("20210110063105_AddProductFeedBackTable")]
+    partial class AddProductFeedBackTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -289,45 +291,6 @@ namespace Barayand.DAL.Migrations
                     b.ToTable("CategoryAttribute");
                 });
 
-            modelBuilder.Entity("Barayand.Models.Entity.CatalogModel", b =>
-                {
-                    b.Property<int>("C_Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("C_CatId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("C_ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("C_SortField")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("C_Status")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("C_Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("Created_At")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("Deleted_At")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Lang")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("Updated_At")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("C_Id");
-
-                    b.ToTable("Catalog");
-                });
-
             modelBuilder.Entity("Barayand.Models.Entity.ColorModel", b =>
                 {
                     b.Property<int>("C_Id")
@@ -548,9 +511,6 @@ namespace Barayand.DAL.Migrations
 
                     b.Property<bool>("E_IsDeleted")
                         .HasColumnType("bit");
-
-                    b.Property<string>("E_Link")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("E_Sort")
                         .HasColumnType("int");

@@ -48,7 +48,7 @@ namespace Barayand.Controllers.Cpanel.Content.Gallery
             try
             {
                 List<GalleryCategoryModel> data = (List<GalleryCategoryModel>)(await this._repository.GetAll()).Data;
-                List<GalleryCategory> result = _mapper.Map<List<GalleryCategoryModel>, List<GalleryCategory>>(data.Where(x=>x.GC_Type == type && x.Lang == lang).ToList());
+                List<GalleryCategory> result = _mapper.Map<List<GalleryCategoryModel>, List<GalleryCategory>>(data.Where(x=>x.GC_Type == type).ToList());
                 return new JsonResult(ResponseModel.Success("CATEGORY_LIST_RETURNED", result));
             }
             catch (Exception ex)
@@ -131,7 +131,7 @@ namespace Barayand.Controllers.Cpanel.Content.Gallery
             try
             {
                 List<GalleryCategoryModel> data = (List<GalleryCategoryModel>)(await this._repository.GetAll()).Data;
-                List<ComboItems.IGCategory> result = _mapper.Map<List<GalleryCategoryModel>, List<ComboItems.IGCategory>>(data.Where(x=>x.GC_Type == type && x.Lang == lang).ToList());
+                List<ComboItems.IGCategory> result = _mapper.Map<List<GalleryCategoryModel>, List<ComboItems.IGCategory>>(data.Where(x=>x.GC_Type == type ).ToList());
                 return new JsonResult(ResponseModel.Success("CATEGORIES_LIST_RETURNED", result));
             }
             catch (Exception ex)

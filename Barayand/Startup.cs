@@ -82,6 +82,8 @@ namespace Barayand
                 mc.AddProfile(new Common.MapperProfiles.FaqProfiler());
                 mc.AddProfile(new Common.MapperProfiles.AmazingRequestProfiler());
                 mc.AddProfile(new Common.MapperProfiles.BetterPriceProfiler());
+                mc.AddProfile(new Common.MapperProfiles.ProdFeedbackProfiler());
+                mc.AddProfile(new Common.MapperProfiles.CatalogProfiler());
             });
             IMapper mapper = MapperConfiguration.CreateMapper();
             services.AddSingleton(mapper);
@@ -146,6 +148,8 @@ namespace Barayand
             services.AddScoped(typeof(IPublicMethodRepsoitory<FaqCategoryModel>), typeof(FaqCategoryRepository));
             services.AddScoped(typeof(IPublicMethodRepsoitory<AmazingRequestModel>), typeof(AmazingRequestRepository));
             services.AddScoped(typeof(IPublicMethodRepsoitory<BetterPriceFoundModel>), typeof(BetterPriceRepository));
+            services.AddScoped(typeof(IPublicMethodRepsoitory<ProdFeedbackModel>), typeof(ProdFeedbackRepository));
+            services.AddScoped(typeof(IPublicMethodRepsoitory<CatalogModel>), typeof(CatalogRepository));
             services.AddScoped(typeof(IPublicMethodRepsoitory<FaqModel>), typeof(FaqRepository));
             services.AddScoped(typeof(IProductManualRepository), typeof(ProductManualRepository));
             services.AddScoped(typeof(IExpertReviewRepository), typeof(ExpertReviewRespository));

@@ -19,5 +19,6 @@ namespace Barayand.Models.Entity
         public int E_Sort { get; set; } = 1;
         public int E_Type { get; set; } = 1;//1=>EnergyUsage 2=>BoxGiftWrapper 3=>FooterLogo
         public bool E_IsDeleted { get; set; } = false;
+        public string E_Link { get; set; }//if type == FooterLogo filled this field
     }
 }
