@@ -14,6 +14,10 @@ namespace Barayand.OutModels.Models
         public string U_Email { get; set; }
         public string U_Avatar { get; set; } = "noimage.png";
         public string U_Phone { get; set; }
+        public string U_HomeTel { get; set; }
+        public string U_IdentityCode { get; set; }
+        public string U_CreditCardNum { get; set; }
+        public string U_BirthDate { get; set; }
         public string U_Password { get; set; }
         public decimal U_Wallet { get; set; } = 0;
         public int U_Status { get; set; }
