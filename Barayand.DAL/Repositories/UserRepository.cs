@@ -35,7 +35,7 @@ namespace Barayand.DAL.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<ResponseStructure> UserLogin(UserModel um)
+        public async Task<ResponseStructure> AdminLogin(UserModel um)
         {
             try
             {
@@ -46,14 +46,39 @@ namespace Barayand.DAL.Repositories
                 {
                     return ResponseModel.Error("Sorry,we couldn't find an account with that username and password.");
                 }
-                if(exists.U_Status == 2)
+                if (exists.U_Status == 2)
                 {
                     return ResponseModel.Error("Your account has been suspened.");
                 }
-                var token = TokenService.GenerateToken(exists.U_Id,exists.U_Name+" "+exists.U_Family,exists.U_Email);
+                var token = TokenService.GenerateToken(exists.U_Id, exists.U_Name + " " + exists.U_Family, exists.U_Email);
                 um.Token = token;
-                return ResponseModel.Success(data:um);
-                
+                return ResponseModel.Success(data: um);
+
+            }
+            catch (Exception ex)
+            {
+                return ResponseModel.ServerInternalError(data: ex);
+            }
+        }
+        public async Task<ResponseStructure> UserLogin(UserModel um)
+        {
+            try
+            {
+                var getAll = (List<UserModel>)(await GetAll()).Data;
+                var exists = getAll.FirstOrDefault(x => x.U_Phone == um.U_Phone);
+                bool truepwd = false;
+                if (exists == null)
+                {
+                    return ResponseModel.Error("Sorry,we couldn't find an account with that username and password.");
+                }
+                if (exists.U_Status == 2)
+                {
+                    return ResponseModel.Error("Your account has been suspened.");
+                }
+                var token = TokenService.GenerateToken(exists.U_Id, exists.U_Name + " " + exists.U_Family, exists.U_Phone);
+                um.Token = token;
+                return ResponseModel.Success(data: um);
+
             }
             catch (Exception ex)
             {

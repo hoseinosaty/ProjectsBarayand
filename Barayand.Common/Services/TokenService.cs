@@ -74,12 +74,12 @@ namespace Barayand.Common.Services
         }
         public static int AuthorizeUser(Microsoft.AspNetCore.Http.HttpRequest Request)
         {
-            if (Request.Cookies["GbookUser"] != null)
+            if (Request.Cookies["HomeKitoUser"] != null)
             {
-                string cookie = Request.Cookies["GbookUser"];
+                string cookie = Request.Cookies["HomeKitoUser"];
                 var loginInfo = Barayand.Common.Services.CryptoJsService.DecryptStringAES(cookie);
                 IdentityKey identityKey = JsonConvert.DeserializeObject<IdentityKey>(loginInfo);
-                if(DateTime.Now >  identityKey.ExpiresLogin)
+                if (DateTime.Now > identityKey.ExpiresLogin)
                 {
                     return 0;
                 }

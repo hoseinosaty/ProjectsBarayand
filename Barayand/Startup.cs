@@ -92,6 +92,7 @@ namespace Barayand
             services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
             services.AddScoped(typeof(IAttributeAnswerRepository),typeof(AttributeAnswerRepository));
             
+            services.AddScoped(typeof(IAddressRepository),typeof(AddressRepository));
             services.AddScoped(typeof(IPCRepository),typeof(PCRepository));
             services.AddScoped(typeof(IPRRepository),typeof(RelationProductRepository));
             services.AddScoped(typeof(IPerfectProductRepository),typeof(PerfectProductRepository));
@@ -103,6 +104,7 @@ namespace Barayand
             services.AddScoped(typeof(IPromotionRepository), typeof(PromotionRepository));
             services.AddScoped(typeof(IFestivalRepository), typeof(FestivalRepository));
             services.AddScoped(typeof(IFileAccessService), typeof(Barayand.Services.Services.FileAccessSerivce));
+            services.AddScoped(typeof(IWalletHistoryRepository), typeof(WalletHistoryRepository));
             services.AddScoped(typeof(ISmsService), typeof(Barayand.Services.Services.SmsService));
             services.AddScoped(typeof(IPublicMethodRepsoitory<GalleryCategoryModel>),typeof(GalleryCatRepository));
             services.AddScoped(typeof(IPublicMethodRepsoitory<ProductCategoryModel>),typeof(PCRepository));

@@ -9,6 +9,7 @@ namespace Barayand.DAL.Interfaces
     public interface IUserRepository : IPublicMethodRepsoitory<UserModel>
     {
         Task<ResponseStructure> UserLogin(UserModel um);
+        Task<ResponseStructure> AdminLogin(UserModel um);
         Task<ResponseStructure> UpdateProfile(Microsoft.AspNetCore.Http.HttpRequest httpRequest,int userId);
         Task<ResponseStructure> UpdatePassword(Microsoft.AspNetCore.Http.HttpRequest httpRequest, Microsoft.AspNetCore.Http.HttpResponse response, int userId);
         Task<ResponseStructure> SuspendUser(UserModel um);
