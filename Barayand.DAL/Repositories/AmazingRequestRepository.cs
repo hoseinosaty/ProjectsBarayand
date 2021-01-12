@@ -28,5 +28,22 @@ namespace Barayand.DAL.Repositories
         {
             throw new NotImplementedException();
         }
+        public async Task<ResponseStructure> Insert(AmazingRequestModel entity)
+        {
+            try
+            {
+                var checkExists = _context.AmazingRequests.FirstOrDefault(x=>x.A_UserId == entity.A_UserId && x.A_ProductId == entity.A_ProductId && x.A_Type == entity.A_Type);
+                if(checkExists == null)
+                {
+                    _context.AmazingRequests.Add(entity);
+                    await CommitAllChanges();
+                }
+                return ResponseModel.Success("operation successfully completed");
+            }
+            catch (Exception ex)
+            {
+                return ResponseModel.ServerInternalError(data: ex);
+            }
+        }
     }
 }

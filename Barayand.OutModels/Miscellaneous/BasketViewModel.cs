@@ -10,7 +10,7 @@ namespace Barayand.OutModels.Miscellaneous
     {
         public List<ProductList> Products { get; set; } = new List<ProductList>();
         public ReciptientInfoModel ReciptientInfo { get; set; } = new ReciptientInfoModel();
-       
+        public Coupon CouponInfo { get; set; } = null;
     }
     public class ProductList
     {
@@ -25,5 +25,10 @@ namespace Barayand.OutModels.Miscellaneous
         public decimal Total { get; set; } = 0;
         public ProductModel GiftProduct { get; set; } = null;
     }
-
+    public class Coupon
+    {
+        public string CouponId { get; set; }
+        public decimal CouponDiscount { get; set; } = 0;
+        public decimal CouponAmount { get; set; } = 0;
+    }
 }

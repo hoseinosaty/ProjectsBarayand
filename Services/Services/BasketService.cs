@@ -251,6 +251,13 @@ namespace Barayand.Services.Services
                             }
                             basketView.Products.AddRange(productLists);
                             basketView.ReciptientInfo = BasketModel.RecipientInfo;
+                            if(BasketModel.Coppon.Count() > 0)
+                            {
+                                var c = BasketModel.Coppon.FirstOrDefault();
+                                var SumTotal = basketView.Products.Sum(x=>x.Total);
+                                var coupunAmount = (SumTotal * c.CP_Discount) / 100;
+                                basketView.CouponInfo = new Coupon() {CouponAmount = coupunAmount,CouponDiscount = c.CP_Discount,CouponId = c.CP_Code };
+                            }
                         }
                     }
                 }
