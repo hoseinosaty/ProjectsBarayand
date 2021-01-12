@@ -20,6 +20,19 @@ namespace Barayand.DAL.Repositories
             this._context = context;
         }
 
+        public async Task<PromotionBoxProductsModel> CheckProductCombineExistsInBox(int pid, int wid, int cid)
+        {
+            try
+            {
+                var allRelations = await this._context.PromotionBoxProducts.FirstOrDefaultAsync(x => x.X_ProdId == pid && x.X_WarrantyId == wid && x.X_ColorId == cid);
+                return allRelations;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
         public async Task<PromotionBoxProductsModel> CheckProductEixstsInBoxs(int pid)
         {
             try

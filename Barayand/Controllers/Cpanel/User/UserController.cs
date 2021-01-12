@@ -174,6 +174,7 @@ namespace Barayand.Controllers.Cpanel.User
                 else
                 {
                     var csms = ((List<UserModel>)(await _userrepo.GetAll()).Data).Where(x => x.U_Role == 2).ToList();
+                    csms.ForEach(async x => x.UserAdresses = await _addressrepositoy.GetUserActiveAddress(x.U_Id));
                     return new JsonResult(ResponseModel.Success(data: csms));
                 }
             }

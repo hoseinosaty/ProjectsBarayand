@@ -1,0 +1,29 @@
+﻿using Barayand.Models.Entity;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Barayand.OutModels.Miscellaneous
+{
+    public class BasketViewModel
+    {
+        public List<ProductList> Products { get; set; } = new List<ProductList>();
+        public ReciptientInfoModel ReciptientInfo { get; set; } = new ReciptientInfoModel();
+       
+    }
+    public class ProductList
+    {
+        public int ProductCombineId { get; set; } = 0;
+        public string ProductImage { get; set; }
+        public string ProductTitle { get; set; }
+        public string WarrantyTitle { get; set; }
+        public string ColorTitle { get; set; }
+        public decimal Price { get; set; } = 0;
+        public decimal DiscountedPrice { get; set; } = 0;
+        public int Quantity { get; set; } = 1;
+        public decimal Total { get; set; } = 0;
+        public ProductModel GiftProduct { get; set; } = null;
+    }
+
+}

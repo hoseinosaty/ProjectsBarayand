@@ -9,10 +9,13 @@ namespace Barayand.OutModels.Miscellaneous
     {
         public string Name { get; set; }
         public string Phone { get; set; }
-        public int Province { get; set; }
-        public int State { get; set; }
+        public int Province { get; set; } = 0;
+        public int State { get; set; } = 0;
         public string Address { get; set; }
+        public int AddressId { get; set; } = 0;
         public string Tel { get; set; }
         public string ZipCode { get; set; }
+        public string Description { get; set; }
+        public string DeliveryDate { get; set; }//format yyyy/MM/dd HH:mm:ss
     }
 }

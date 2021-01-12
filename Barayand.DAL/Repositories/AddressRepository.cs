@@ -43,7 +43,7 @@ namespace Barayand.DAL.Repositories
             try
             {
                 var allAddress = ((List<AddressModel>)(await GetAll()).Data);
-                return allAddress.Where(x=>x.A_UserId == userID).ToList();
+                return allAddress.Where(x=>x.A_UserId == userID && x.isActive).ToList();
             }
             catch(Exception ex)
             {

@@ -185,6 +185,24 @@ namespace Barayand.DAL.Repositories
                 {
                     return null;
                 }
+                var hasgift = _context.GiftProduct.FirstOrDefault(x=>x.X_MainProdId == AllProducts.P_Id);
+                if(hasgift != null)
+                {
+                    var defcombine = _context.ProductCombine.FirstOrDefault(x=>x.X_WarrantyId == hasgift.X_WarrantyId && x.X_ColorId == hasgift.X_ColorId && x.X_ProductId == hasgift.X_ProdId);
+                    if(defcombine != null)
+                    {
+                        ProductModel Gift = new ProductModel();
+                        var prod = _context.Product.FirstOrDefault(x=>x.P_Id == hasgift.X_ProdId);
+                        if(prod != null)
+                        {
+                            Gift = prod;
+                            Gift.DefaultProductCombine = defcombine;
+                            AllProducts.Gift = Gift;
+                        }
+                        
+                    }
+                }
+
                 List<ProductCategoryModel> AllCategories = this._context.ProductCategory.ToList();
                 List<BrandModel> AllBrands = this._context.Brands.ToList();
                 List<ProductLabelRelationModel> AllLabels = this._context.ProductLabelRelation.ToList();

@@ -30,7 +30,31 @@ namespace Barayand.DAL.Repositories
                 return ResponseModel.ServerInternalError(data:ex);
             }
         }
+        public async Task<ProductCombineModel> GetById(object id)
+        {
+            try
+            {
+                var allCombines = ((List<ProductCombineModel>)(await GetAll()).Data);
+                
+                var entity = allCombines.FirstOrDefault(x=>x.X_Id == int.Parse(id.ToString()));
+                if(entity != null)
+                {
+                    var color = this._context.Color.FirstOrDefault(x=>x.C_Id == entity.X_ColorId);
+                    var warranty = this._context.Warranty.FirstOrDefault(x=>x.W_Id == entity.X_WarrantyId);
+                    if (color != null)
+                        entity.ColorDetail = color;
+                    if (warranty != null)
+                        entity.WarrantyModel = warranty;
 
+
+                }
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
         public async Task<ResponseStructure> LogicalDelete(object id)
         {
             try

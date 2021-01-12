@@ -77,6 +77,7 @@ namespace Barayand.DAL.Context
         public DbSet<BetterPriceFoundModel> BetterPriceRequest { get; set; }
         public DbSet<ProdFeedbackModel> ProductFeedbacks { get; set; }
         public DbSet<CatalogModel> Catalog { get; set; }
+        public DbSet<AddressModel> Address { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

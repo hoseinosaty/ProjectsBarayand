@@ -16,11 +16,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Barayand.Services.Services
 {
     public class BasketService : IBasketService
     {
+        private readonly IPublicMethodRepsoitory<ProductCombineModel> _productcombinerepo;
         private readonly IPublicMethodRepsoitory<ProductModel> _productrepo;
+        private readonly IPublicMethodRepsoitory<ProductManualModel> _productmanualrepo;
         private readonly IPublicMethodRepsoitory<CopponModel> _couponrepo;
         private readonly IUserRepository _userrepository;
         private readonly IWalletHistoryRepository _walletrepository;
@@ -30,15 +33,16 @@ namespace Barayand.Services.Services
         public readonly IPublicMethodRepsoitory<OptionsModel> _optionrepository;
         private readonly ILocalizationService _lang;
         private readonly ISmsService _smsService;
-        private readonly IPriceCalculatorService _priceCalculator;
+        private readonly IPCalcRepository _priceCalculator;
         private readonly IViewRenderer renderer;
-        private int CVRT = 1000;
-        private int BINPERC = 1;
-        public List<ProductModel> AllProducts;
-        public BasketService(ILogger<BasketService> logger, IPublicMethodRepsoitory<ProductModel> productrepo, IPublicMethodRepsoitory<CopponModel> couponrepo, IUserRepository userRepository, IWalletHistoryRepository walletHistoryRepository, ILocalizationService lang, IViewRenderer viewRenderer, IPublicMethodRepsoitory<InvoiceModel> invoicerepo, IPublicMethodRepsoitory<OrderModel> orderrepository, ISmsService smsService, IPriceCalculatorService priceCalculator, IPublicMethodRepsoitory<OptionsModel> optionrepository)
+        public List<ProductCombineModel> AllProducts;
+        private bool STOREISACTIVE = true;
+        private bool DELETEDISCOUNTS = false;
+        private bool ISACTIVESPECIALSALE = false;
+        public BasketService(ILogger<BasketService> logger, IPublicMethodRepsoitory<ProductCombineModel> productcombinerepo, IPublicMethodRepsoitory<CopponModel> couponrepo, IUserRepository userRepository, IWalletHistoryRepository walletHistoryRepository, ILocalizationService lang, IViewRenderer viewRenderer, IPublicMethodRepsoitory<InvoiceModel> invoicerepo, IPublicMethodRepsoitory<OrderModel> orderrepository, ISmsService smsService, IPCalcRepository priceCalculator, IPublicMethodRepsoitory<OptionsModel> optionrepository, IPublicMethodRepsoitory<ProductModel> productrepo, IPublicMethodRepsoitory<ProductManualModel> productmanualrepo)
         {
             this._logger = logger;
-            this._productrepo = productrepo;
+            this._productcombinerepo = productcombinerepo;
             this._couponrepo = couponrepo;
             this._userrepository = userRepository;
             this._walletrepository = walletHistoryRepository;
@@ -49,131 +53,100 @@ namespace Barayand.Services.Services
             this._optionrepository = optionrepository;
             this.Initilize();
             renderer = viewRenderer;
-            _lang = lang;
-
+            _productrepo = productrepo;
+            _productmanualrepo = productmanualrepo;
         }
         public async Task Initilize()
         {
-            var cvrtbase = ((List<OptionsModel>)(await _optionrepository.GetAll()).Data).FirstOrDefault(x => x.O_Key == "CVRTTOMANTOPOINT");
-            var bin = ((List<OptionsModel>)(await _optionrepository.GetAll()).Data).FirstOrDefault(x => x.O_Key == "GIFTBINPERCENTAGE");
-            if (cvrtbase != null)
-            {
-                CVRT = int.Parse(cvrtbase.O_Value);
-            }
-            if (bin != null)
-            {
-                BINPERC = int.Parse(bin.O_Value);
-            }
+            var storeisactive = ((List<OptionsModel>)(await _optionrepository.GetAll()).Data).FirstOrDefault(x => x.O_Key == "SHOPSTATE");
+            var deletediscounts = ((List<OptionsModel>)(await _optionrepository.GetAll()).Data).FirstOrDefault(x => x.O_Key == "DELETEDISCOUNTS");
+            var isactivespecialsale = ((List<OptionsModel>)(await _optionrepository.GetAll()).Data).FirstOrDefault(x => x.O_Key == "SPECIALSALESTATE");
+            if (storeisactive != null)
+                STOREISACTIVE = (storeisactive.O_Value == "true") ? true : false;
+            if (deletediscounts != null)
+                DELETEDISCOUNTS = (deletediscounts.O_Value == "true") ? true : false;
+            if (isactivespecialsale != null)
+                ISACTIVESPECIALSALE = (isactivespecialsale.O_Value == "true") ? true : false;
+
+            AllProducts = ((List<ProductCombineModel>)(await _productcombinerepo.GetAll()).Data);
+
         }
         public async Task<ResponseStructure> AddToCart(HttpRequest httpRequest, HttpResponse httpResponse)
         {
             try
             {
-                AllProducts = ((List<ProductModel>)(await _productrepo.GetAll()).Data);
+                if (!this.STOREISACTIVE)
+                    return ResponseModel.Error("با عرض پوزش ، در حال حاضر امکان سفارش گیری وجود ندارد");
+
                 StringValues data;
-                StringValues PrintAble ;
+
                 if (!httpRequest.Headers.TryGetValue("AddToCart", out data))
-                {
-                    return ResponseModel.Error("Invalid access detect.");
-                }
-                if (!httpRequest.Headers.TryGetValue("PrintAble", out PrintAble))
-                {
-                    return ResponseModel.Error("Invalid access detect.");
-                }
+                    return ResponseModel.Error("دسترسی غیر مجاز");
+
                 var dec = Barayand.Common.Services.CryptoJsService.DecryptStringAES(data);
-                BasketItem rm = JsonConvert.DeserializeObject<BasketItem>(dec);
-                var findProduct = AllProducts.FirstOrDefault(x => x.P_Id == rm.ProductId);
-                if (findProduct == null)
+
+                FullPropertyBasketItem rm = JsonConvert.DeserializeObject<FullPropertyBasketItem>(dec);
+
+                ProductCombineModel findProduct = new ProductCombineModel();
+                if (rm.ProductType == 1)
                 {
-                    return ResponseModel.Error("Invalid access detect.");
+                    findProduct = AllProducts.FirstOrDefault(x => x.X_Id == rm.ProductCombineId);
+                    if (findProduct == null)
+                        return ResponseModel.Error("تنوع محصول مورد نظر یافت نشد");
+
+                    if (!findProduct.X_Status || findProduct.X_IsDeleted || findProduct.X_AvailableCount < 1)
+                        return ResponseModel.Error("متاسفانه محصول مورد نظر در انبار موجود نمیباشد");
+
+                    if (rm.ProductType == 1 && (rm.Quantity) > findProduct.X_AvailableCount)
+                        return ResponseModel.Error("محصول مورد نظر در تعداد درخواستی موجود نمیباشد");
                 }
-                var product = new ProductBasketModel() {
-                    P_BinPrice = findProduct.P_BinPrice,
-                    P_Code = findProduct.P_Code,
-                    P_Discount = findProduct.P_Discount,
-                    P_DiscountPeriodTime = findProduct.P_DiscountPeriodTime,
-                    P_DiscountType = findProduct.P_DiscountType,
-                    P_ExternalPrice = findProduct.P_ExternalPrice,
-                    P_GiftBin = findProduct.P_GiftBin,
-                    P_Id = findProduct.P_Id,
-                    P_Image = findProduct.P_Image,
-                    P_PageCount = findProduct.P_PageCount,
-                    P_PeriodDiscountPrice = findProduct.P_PeriodDiscountPrice,
-                    P_PeriodDiscountPriceType = findProduct.P_PeriodDiscountPriceType,
-                    P_PeriodPrintableFomrulaId = findProduct.P_PeriodPrintableFomrulaId,
-                    P_PeriodPrintablePrice = findProduct.P_PeriodPrintablePrice,
-                    P_PeriodPrintablePriceType = findProduct.P_PeriodPrintablePriceType,
-                    P_Price = findProduct.P_Price,
-                    P_PriceFormulaId = findProduct.P_PriceFormulaId,
-                    P_PriceType = findProduct.P_PriceType,
-                    P_PrintAbleVerFormulaId = findProduct.P_PrintAbleVerFormulaId,
-                    P_PrintAbleVerPrice = findProduct.P_PrintAbleVerPrice,
-                    P_PrintAbleVerPriceType = findProduct.P_PrintAbleVerPriceType,
-                    P_PrintAbleVersion = findProduct.P_PrintAbleVersion,
-                    P_PriodDiscountFormulaId = findProduct.P_PriodDiscountFormulaId,
-                    P_Title = findProduct.P_Title,
-                    P_Type = findProduct.P_Type,
-                    P_Weight = findProduct.P_Weight,
-                    PriceModel = await _priceCalculator.CalculateBookPrice(findProduct.P_Id,_lang.GetLang())
-                };
-                rm.PrintAble = bool.Parse(PrintAble); 
-                BasketModel basket = new BasketModel();
+
+
+                FullPropertyBasketModel BasketModel = new FullPropertyBasketModel();
                 string cookie;
                 if (httpRequest.Cookies.TryGetValue("Cart", out cookie))
                 {
                     if (cookie != null)
                     {
                         var basketInfo = Barayand.Common.Services.CryptoJsService.DecryptStringAES(cookie);
-                        basket = JsonConvert.DeserializeObject<BasketModel>(basketInfo);
-                        if (basket.CartItems.Count > 0)
+                        BasketModel = JsonConvert.DeserializeObject<FullPropertyBasketModel>(basketInfo);
+                        if (BasketModel.CartItems.Count() > 0)
                         {
-                            if (basket.CartItems.FirstOrDefault(x => x.Product.P_Type != product.P_Type) != null)
+                            if (BasketModel.CartItems.Count(x => x.ProductCombineId == rm.ProductCombineId && x.ProductType == rm.ProductType) > 0)
                             {
-                                return ResponseModel.Error("You can only add a type of product (Book or Art or Learning trains) in same time.");
-                            }
-                        }
-                        if(bool.Parse(PrintAble) == false)
-                        {
-                            var checkDuplicatePdf = basket.CartItems.FirstOrDefault(x => x.Product.P_Id == rm.ProductId && x.PrintAble == false);
-                            if (checkDuplicatePdf != null)
-                            {
-                                return ResponseModel.Error("از هر کتاب شما تنها میتوانید یک نسخه PDF سفارش دهید");
-                            }
-                        }
-                        var existsProduct = basket.CartItems.FirstOrDefault(x => x.Product.P_Id == rm.ProductId && x.PrintAble == bool.Parse(PrintAble));
-                        if (existsProduct != null)
-                        {
-                            existsProduct.Quantity += rm.Quantity;
-                        }
-                        else
-                        {
-                            rm.Product = product;
-                            basket.CartItems.Add(rm);
-                        }
+                                var existsCombine = BasketModel.CartItems.FirstOrDefault(x => x.ProductCombineId == rm.ProductCombineId && x.ProductType == rm.ProductType);
 
+                                if ((existsCombine.Quantity + rm.Quantity) > findProduct.X_AvailableCount)
+                                    return ResponseModel.Error("محصول مورد نظر در تعداد درخواستی موجود نمیباشد");
+
+                                existsCombine.Quantity = existsCombine.Quantity + rm.Quantity;
+
+                            }
+                            else
+                            {
+                                BasketModel.CartItems.Add(rm);
+                            }
+                        }
                     }
                     else
                     {
-                        rm.Product = product;
-                        basket.CartItems.Add(rm);
+                        BasketModel.CartItems.Add(rm);
                     }
                 }
                 else
                 {
-                    rm.Product = product;
-                    basket.CartItems.Add(rm);
-                    basket.OrderDate = DateTime.Now;
+                    BasketModel.CartItems.Add(rm);
+                    BasketModel.OrderDate = DateTime.Now;
                 }
-                
-                string token = Barayand.Common.Services.CryptoJsService.EncryptStringToAES(JsonConvert.SerializeObject(basket));
+                string token = Barayand.Common.Services.CryptoJsService.EncryptStringToAES(JsonConvert.SerializeObject(BasketModel));
                 httpResponse.Cookies.Delete("Cart");
                 httpResponse.Cookies.Append("Cart", token);
-                return ResponseModel.Success("Product added.");
+                return ResponseModel.Success("محصول مورد نظر با موفقیت به سبد خرید اضافه گردید");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                _logger.LogError("Error in adding entity to customer basket",ex);
-                return ResponseModel.ServerInternalError(data:ex);
+                _logger.LogError("Error in adding product to basket", ex);
+                return ResponseModel.ServerInternalError(data: ex);
             }
         }
 
@@ -182,7 +155,7 @@ namespace Barayand.Services.Services
             try
             {
                 StringValues data;
-                BasketModel basket = new BasketModel();
+                FullPropertyBasketModel basket = new FullPropertyBasketModel();
                 string cookie;
                 if (httpRequest.Cookies.TryGetValue("Cart", out cookie))
                 {
@@ -198,35 +171,94 @@ namespace Barayand.Services.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("Error in deleting  customer basket", ex);
+                _logger.LogError("Error in free up basket cart", ex);
                 return ResponseModel.ServerInternalError(data: ex);
             }
         }
 
-        public async Task<BasketModel> GetBasketItems(HttpRequest httpRequest)
+        public async Task<BasketViewModel> GetBasketItems(HttpRequest httpRequest)
         {
-            BasketModel basket = new BasketModel();
             try
             {
+                BasketViewModel basketView = new BasketViewModel();
                 string cookie;
                 if (httpRequest.Cookies.TryGetValue("Cart", out cookie))
                 {
                     if (cookie != null)
                     {
+                        FullPropertyBasketModel BasketModel = new FullPropertyBasketModel();
                         var basketInfo = Barayand.Common.Services.CryptoJsService.DecryptStringAES(cookie);
-                        basket = JsonConvert.DeserializeObject<BasketModel>(basketInfo);
-                        foreach(var item in basket.CartItems)
+                        BasketModel = JsonConvert.DeserializeObject<FullPropertyBasketModel>(basketInfo);
+                        if (BasketModel.CartItems.Count() > 0)
                         {
-                            item.Product.PriceModel =await _priceCalculator.CalculateBookPrice(item.Product.P_Id,_lang.GetLang());
+                            List<ProductList> productLists = new List<ProductList>();
+                            foreach (var item in BasketModel.CartItems)
+                            {
+                                ProductList productList = new ProductList();
+                                if(item.ProductType == 1)//item is product combine
+                                {
+                                    var productcomine = await _productcombinerepo.GetById(item.ProductCombineId);
+                                    if(productcomine != null)
+                                    {
+                                        ProductModel product = await _productrepo.GetById(productcomine.X_ProductId);
+                                        if(product != null)
+                                        {
+                                            var priceModel = await _priceCalculator.CalculateProductCombinePrice(productcomine.X_Id,product.P_EndLevelCatId);
+                                            productList.ProductTitle = product.P_Title;
+                                            productList.ProductImage = product.P_Image;
+                                            productList.ProductCombineId = productcomine.X_Id;
+                                            productList.Quantity = item.Quantity;
+                                            productList.Price = priceModel.Price;
+                                            productList.DiscountedPrice = priceModel.DiscountedPrice;
+                                            if(priceModel.HasDiscount)
+                                            {
+                                                productList.Total = (productList.DiscountedPrice * item.Quantity);
+                                            }
+                                            else
+                                            {
+                                                productList.Total = (productList.Price * item.Quantity);
+                                            }
+                                            productList.ColorTitle = productcomine.ColorDetail.C_Title;
+                                            productList.WarrantyTitle = productcomine.WarrantyModel.W_Title;
+                                            productList.GiftProduct = product.Gift;
+                                            productLists.Add(productList);
+                                            
+                                        }
+                                    }
+                                }
+                                else//item is product manual
+                                {
+                                    var manual = await _productmanualrepo.GetById(item.ProductManualId);
+                                    if(manual != null)
+                                    {
+                                        var product = await _productrepo.GetById(manual.M_ProductId);
+                                        if (product != null)
+                                        {
+                                            productList.ProductTitle = manual.M_Title+"-"+product.P_Title;
+                                            productList.ProductImage = product.P_Image;
+                                            productList.ProductCombineId = 0;
+                                            productList.Quantity = item.Quantity;
+                                            productList.Price = manual.M_Price;
+                                            productList.DiscountedPrice = 0;
+                                            productList.Total = (productList.Price * item.Quantity);
+                                            productList.ColorTitle = "---";
+                                            productList.WarrantyTitle = "---";
+                                            productList.GiftProduct = null;
+                                            productLists.Add(productList);
+                                        }
+                                    }
+                                }
+                            }
+                            basketView.Products.AddRange(productLists);
+                            basketView.ReciptientInfo = BasketModel.RecipientInfo;
                         }
                     }
                 }
-                return basket;
+                return basketView;
             }
             catch (Exception ex)
             {
-                _logger.LogError("Error in adding entity to customer basket", ex);
-                return basket;
+                return new BasketViewModel();
             }
         }
 
@@ -240,18 +272,18 @@ namespace Barayand.Services.Services
                     return ResponseModel.Error("Invalid access detect.");
                 }
                 var dec = Barayand.Common.Services.CryptoJsService.DecryptStringAES(data);
-                BasketItem rm = JsonConvert.DeserializeObject<BasketItem>(dec);
+                FullPropertyBasketItem rm = JsonConvert.DeserializeObject<FullPropertyBasketItem>(dec);
 
-                BasketModel basket = new BasketModel();
+                FullPropertyBasketModel basket = new FullPropertyBasketModel();
                 string cookie;
                 if (httpRequest.Cookies.TryGetValue("Cart", out cookie))
                 {
                     if (cookie != null)
                     {
                         var basketInfo = Barayand.Common.Services.CryptoJsService.DecryptStringAES(cookie);
-                        basket = JsonConvert.DeserializeObject<BasketModel>(basketInfo);
-                        var item = basket.CartItems.FirstOrDefault(x=>x.PrintAble == rm.PrintAble && x.Product.P_Id == rm.ProductId);
-                        if(item != null)
+                        basket = JsonConvert.DeserializeObject<FullPropertyBasketModel>(basketInfo);
+                        var item = basket.CartItems.FirstOrDefault(x => x.ProductCombineId == rm.ProductCombineId && x.ProductType == rm.ProductType);
+                        if (item != null)
                         {
                             basket.CartItems.Remove(item);
                         }
@@ -271,7 +303,7 @@ namespace Barayand.Services.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("Error in remove entity from customer basket", ex);
+                _logger.LogError("Error in removing cart item", ex);
                 return ResponseModel.ServerInternalError(data: ex);
             }
         }
@@ -287,14 +319,14 @@ namespace Barayand.Services.Services
                 }
                 var dec = Barayand.Common.Services.CryptoJsService.DecryptStringAES(data);
                 ReciptientInfoModel rm = JsonConvert.DeserializeObject<ReciptientInfoModel>(dec);
-                BasketModel basket = new BasketModel();
+                FullPropertyBasketModel basket = new FullPropertyBasketModel();
                 string cookie;
                 if (httpRequest.Cookies.TryGetValue("Cart", out cookie))
                 {
                     if (cookie != null)
                     {
                         var basketInfo = Barayand.Common.Services.CryptoJsService.DecryptStringAES(cookie);
-                        basket = JsonConvert.DeserializeObject<BasketModel>(basketInfo);
+                        basket = JsonConvert.DeserializeObject<FullPropertyBasketModel>(basketInfo);
                         basket.RecipientInfo = rm;
                     }
 
@@ -303,7 +335,7 @@ namespace Barayand.Services.Services
                 string token = Barayand.Common.Services.CryptoJsService.EncryptStringToAES(JsonConvert.SerializeObject(basket));
                 httpResponse.Cookies.Delete("Cart");
                 httpResponse.Cookies.Append("Cart", token);
-                return ResponseModel.Success("Reciptient information saved.");
+                return ResponseModel.Success("اطلاعات دریافت کننده سفارش با موفقیت ذخیره گردید.");
             }
             catch (Exception ex)
             {
@@ -311,6 +343,8 @@ namespace Barayand.Services.Services
                 return ResponseModel.ServerInternalError(data: ex);
             }
         }
+
+
 
         public async Task<ResponseStructure> UseCoppon(HttpRequest httpRequest, HttpResponse httpResponse)
         {
@@ -322,31 +356,31 @@ namespace Barayand.Services.Services
                     return ResponseModel.Error("Invalid access detect.");
                 }
                 var dec = Barayand.Common.Services.CryptoJsService.DecryptStringAES(data);
-                BasketItem rm = JsonConvert.DeserializeObject<BasketItem>(dec);
+                FullPropertyBasketItem rm = JsonConvert.DeserializeObject<FullPropertyBasketItem>(dec);
                 var coppon = ((List<CopponModel>)(await _couponrepo.GetAll()).Data).FirstOrDefault(x => x.CP_Code == rm.CopponCode);
                 if (coppon == null)
                 {
-                    return ResponseModel.Error("Coppon code is invalid.");
+                    return ResponseModel.Error("کد تخفیف نامعتبر است.");
                 }
                 if (DateTime.Now >= coppon.CP_EndDate || DateTime.Now < coppon.CP_StartDate)
                 {
-                    return ResponseModel.Error("Coppon has been expired.");
+                    return ResponseModel.Error("کد تخفیف منقضی شده است.");
                 }
-                BasketModel basket = new BasketModel();
+                FullPropertyBasketModel basket = new FullPropertyBasketModel();
                 string cookie;
                 if (httpRequest.Cookies.TryGetValue("Cart", out cookie))
                 {
                     if (cookie != null)
                     {
                         var basketInfo = Barayand.Common.Services.CryptoJsService.DecryptStringAES(cookie);
-                        basket = JsonConvert.DeserializeObject<BasketModel>(basketInfo);
+                        basket = JsonConvert.DeserializeObject<FullPropertyBasketModel>(basketInfo);
                         if (basket.Coppon.Count > 0)
                         {
-                            return ResponseModel.Error("Coppon was applied before.");
+                            return ResponseModel.Error("بیشتر از یک کد تخفیف نمیتوانید استفاده نمایید");
                         }
                         if (basket.Coppon.Count(x => x.CP_Code == coppon.CP_Code) > 0)
                         {
-                            return ResponseModel.Error("Coppon was applied before.");
+                            return ResponseModel.Error("کد تخفیف قبلا اعمال شده است");
                         }
                         basket.Coppon.Add(coppon);
                     }
@@ -356,8 +390,7 @@ namespace Barayand.Services.Services
                 string token = Barayand.Common.Services.CryptoJsService.EncryptStringToAES(JsonConvert.SerializeObject(basket));
                 httpResponse.Cookies.Delete("Cart");
                 httpResponse.Cookies.Append("Cart", token);
-                return ResponseModel.Success("Product added.");
-                return ResponseModel.Success();
+                return ResponseModel.Success("کد تخفیف با موفقیت اعمال گردید");
             }
             catch (Exception ex)
             {
@@ -365,115 +398,9 @@ namespace Barayand.Services.Services
                 return ResponseModel.ServerInternalError(data: ex);
             }
         }
-
-        public async Task<ResponseStructure> TestCheckout(HttpRequest httpRequest, HttpResponse httpResponse,int type = 1)
+        public Task<ResponseStructure> TestCheckout(HttpRequest httpRequest, HttpResponse httpResponse, int type = 1)
         {
-            try
-            {
-                var authorize = Barayand.Common.Services.TokenService.AuthorizeUser(httpRequest);
-                if (authorize < 1)
-                {
-                    return ResponseModel.Error("User not logged in.");
-                }
-                var basket = await GetBasketItems(httpRequest);
-                if (basket.CartItems.Count < 1)
-                {
-                    return ResponseModel.Error("Basket is empty.");
-                }
-                UserModel userModel = await _userrepository.GetById(authorize);
-                decimal wll = userModel.U_Wallet;
-                decimal Sum = basket.BasketTotalAmount(_lang.GetLang(),CVRT);
-                InvoiceModel invoice = new InvoiceModel();
-                invoice.I_TotalAmount = basket.BasketTotalAmount(_lang.GetLang(), CVRT);
-                invoice.I_Id = UtilesService.RandomDigit(12);
-                invoice.I_UserId = authorize;
-                invoice.I_ShippingCost = basket.ShippingCost;
-                invoice.I_RecipientInfo = JsonConvert.SerializeObject(basket.RecipientInfo);
-                invoice.I_CopponDiscount = basket.SumDiscount();
-                invoice.I_CopponId = (basket.Coppon.Count > 0) ? basket.Coppon.FirstOrDefault().CP_Id : 0;
-                invoice.Created_At = DateTime.Now;
-                invoice.I_PaymentDate = DateTime.Now;
-                invoice.I_TotalProductAmount = basket.BasketTotalProductPrice(_lang.GetLang(),CVRT);
-                invoice.I_PaymentInfo = "Test payment";
-                invoice.I_PaymentType = type;
-
-                
-                if(type == 2)
-                {
-                    decimal w = (_lang.GetLang() == "fa") ?userModel.U_Wallet : userModel.U_Wallet / CVRT;
-                    if(w < basket.BasketTotalAmount(_lang.GetLang(), CVRT))
-                    {
-                        return ResponseModel.Error("موجودی کیف پول شما کافی نمیباشد");
-                    }
-                    else
-                    {
-                        w = w - basket.BasketTotalAmount(_lang.GetLang(), CVRT);
-                        await _walletrepository.DecreaseWallet(userModel.U_Id,basket.BasketTotalAmount("fa", CVRT));
-                        await _smsService.WalletAllert(userModel.U_Phone,2, basket.BasketTotalAmount(_lang.GetLang(), CVRT).ToString("#,# تومان"));
-                        invoice.I_Status = 2;
-                    }
-                }
-                if (type == 3)
-                {
-                    decimal w =  userModel.U_Coupon ;
-                    if (w < basket.BasketProductBinPriceTotal(BINPERC))
-                    {
-                        return ResponseModel.Error("تعداد بن های شما برای پرداخت کافی نمیباشد");
-                    }
-                    else
-                    {
-                        userModel.U_Coupon = userModel.U_Coupon - basket.BasketProductBinPriceTotal(BINPERC);
-                        await _userrepository.Update(userModel);
-                        invoice.I_Status = 2;
-                    }
-                }
-                if(type == 4)
-                {
-                    invoice.I_Status = 1;
-                }
-                if (type == 1)
-                {
-                    invoice.I_Status = 2;
-                }
-                ResponseStructure res = await _invoicerepository.Insert(invoice);
-                if (!res.Status)
-                {
-                    return res;
-                }
-                int sumGiftBon = basket.BasketProductBinPriceTotal(BINPERC);
-                foreach (var item in basket.CartItems)
-                {
-                    //sumGiftBon += (item.Product.P_GiftBin * item.Quantity);
-                    var orderres = await _orderrepository.Insert(new OrderModel()
-                    {
-                        O_Discount = (!item.PrintAble) ? basket.BasketProductPrice(item.Product.P_Id, _lang.GetLang(), false, false) : basket.BasketProductPrintablePrice(item.Product.P_Id, _lang.GetLang(), false, false),
-                        O_DiscountType = item.Product.P_DiscountType,
-                        O_Price = (!item.PrintAble) ? basket.BasketProductPrice(item.Product.P_Id, _lang.GetLang(), true, false) : basket.BasketProductPrintablePrice(item.Product.P_Id, _lang.GetLang(), true, false),
-                        O_Quantity = item.Quantity,
-                        O_ProductId = item.Product.P_Id,
-                        O_ReciptId = invoice.I_Id,
-                        Created_At = DateTime.Now,
-                        Lang = _lang.GetLang(),
-                        O_Version = item.PrintAble ? 2 : 1
-                        
-                    });
-                }
-                userModel.U_Coupon += sumGiftBon;
-                await _userrepository.Update(userModel);
-                await this.FreeUpCart(httpRequest, httpResponse);
-                if(_lang.GetLang() == "fa")
-                {
-                    await _smsService.OrderAlert(userModel.U_Phone, invoice.I_Id, basket.BasketTotalAmount(_lang.GetLang(),CVRT).ToString("#,# تومان"));
-                }
-                
-                return ResponseModel.Success("سفارش شما با موفقیت ثبت گردید",new {invoiceid = invoice.I_Id });
-                
-
-            }
-            catch (Exception ex)
-            {
-                return ResponseModel.ServerInternalError(data: ex);
-            }
+            throw new NotImplementedException();
         }
     }
 }

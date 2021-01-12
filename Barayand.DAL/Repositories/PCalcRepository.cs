@@ -35,6 +35,81 @@ namespace Barayand.DAL.Repositories
             this._festrepo = festivalRepository;
         }
 
+        public async Task<ProductCombinePriceModel> CalculateProductCombinePrice(int cid, int EndLevelCatId = 0)
+        {
+            try
+            {
+                ProductCombinePriceModel PriceModel = new ProductCombinePriceModel();
+                var existsCombine = await _combinerepo.GetById(cid);
+                if(existsCombine != null)
+                {
+                    List<FestivalOfferModel> AllFestivalRepo = ((List<FestivalOfferModel>)(await _festrepo.GetAll()).Data);
+                    var existsInBox = await _boxProdRepository.CheckProductCombineExistsInBox(existsCombine.X_ProductId,existsCombine.X_WarrantyId,existsCombine.X_ColorId);
+                    if (existsInBox != null)
+                    {
+                        var defaultCombine = existsCombine;
+
+                        PriceModel.Price = defaultCombine.X_Price;
+                        if (existsInBox.X_SectionId == 34 && (DateTime.Now >= existsInBox.X_StartDate && DateTime.Now <= existsInBox.X_EndDate))//is special sale and timer started
+                        {
+                            if (existsInBox.X_DiscountedPrice > 0)//has discount
+                            {
+                                PriceModel.HasDiscount = true;
+                                if (!existsInBox.X_DiscountType) // please calculate price by percentage
+                                {
+                                    PriceModel.Discount = existsInBox.X_DiscountedPrice;
+                                    PriceModel.DiscountedPrice = (defaultCombine.X_Price - ((defaultCombine.X_Price * existsInBox.X_DiscountedPrice) / 100));
+                                }
+                                else//calculate percentage by price
+                                {
+                                    PriceModel.Discount = ((existsInBox.X_DiscountedPrice * 100) / defaultCombine.X_Price);
+                                    PriceModel.DiscountedPrice = existsInBox.X_DiscountedPrice;
+                                }
+                            }
+                            PriceModel.Timer = existsInBox.X_EndDate.ToString("yyyy-MM-dd HH:mm:ss");
+                        }
+                        
+                        if (existsInBox.X_SectionId != 34)
+                        {
+                            if (existsInBox.X_DiscountedPrice > 0)//has discount
+                            {
+                                PriceModel.HasDiscount = true;
+                                if (!existsInBox.X_DiscountType) // please calculate price by percentage
+                                {
+                                    PriceModel.Discount = existsInBox.X_DiscountedPrice;
+                                    PriceModel.DiscountedPrice = (defaultCombine.X_Price - ((defaultCombine.X_Price * existsInBox.X_DiscountedPrice) / 100));
+                                }
+                                else//calculate percentage by price
+                                {
+                                    PriceModel.Discount = ((existsInBox.X_DiscountedPrice * 100) / defaultCombine.X_Price);
+                                    PriceModel.DiscountedPrice = existsInBox.X_DiscountedPrice;
+                                }
+                            }
+                        }
+                    }
+                    else if (AllFestivalRepo.Count(x => x.F_Type == 1 && x.F_Status) > 0)
+                    {
+                        var fest = AllFestivalRepo.FirstOrDefault(x => x.F_Type == 1);
+                        var defaultCombine = existsCombine;
+                        var cmb = await SetDiscountByCombine(defaultCombine,fest.F_Discount);
+                        PriceModel = cmb.PriceModel;
+                    }
+                    else if (EndLevelCatId != 0 && AllFestivalRepo.Count(x => x.F_Type == 2 && x.F_Status && x.F_EndLevelCategoryId == EndLevelCatId) > 0)
+                    {
+                        var fest = AllFestivalRepo.FirstOrDefault(x => x.F_Type == 2 && x.F_Status && x.F_EndLevelCategoryId == EndLevelCatId);
+                        var cmb = await SetDiscountByCombine(existsCombine, fest.F_Discount);
+                        PriceModel = cmb.PriceModel;
+                    }
+                   
+                }
+                return PriceModel;
+            }
+            catch(Exception ex)
+            {
+                return new ProductCombinePriceModel();
+            }
+        }
+
         public async Task<ProductCombineModel> CalculateProductPrice(int pid, int EndLevelCatId = 0)
         {
             Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en");
@@ -157,6 +232,43 @@ namespace Barayand.DAL.Repositories
                         }
                     }
                 }
+                ProductCombine.PriceModel = PriceModel;
+                return ProductCombine;
+            }
+            catch (Exception ex)
+            {
+                return ProductCombine;
+            }
+        }
+        private async Task<ProductCombineModel> SetDiscountByCombine(ProductCombineModel defaultCombine,decimal discount = 0)
+        {
+            ProductCombineModel ProductCombine = defaultCombine;
+            try
+            {
+                ProductCombinePriceModel PriceModel = new ProductCombinePriceModel();
+                //product not exists in boxs
+                        PriceModel.Price = defaultCombine.X_Price;
+                        if (discount != 0)
+                        {
+                            defaultCombine.X_Discount = discount;
+                            defaultCombine.X_DiscountType = 1;
+                        }
+                        if (defaultCombine.X_Discount > 0)//has discount
+                        {
+                            PriceModel.HasDiscount = true;
+                            if (defaultCombine.X_DiscountType == 1) // please calculate price by percentage
+                            {
+                                PriceModel.Discount = defaultCombine.X_Discount;
+                                PriceModel.DiscountedPrice = (defaultCombine.X_Price - ((defaultCombine.X_Price * defaultCombine.X_Discount) / 100));
+                            }
+                            else//calculate percentage by price
+                            {
+                                PriceModel.Discount = ((defaultCombine.X_Discount * 100) / defaultCombine.X_Price);
+                                PriceModel.DiscountedPrice = defaultCombine.X_Discount;
+                            }
+                        }
+                 
+                
                 ProductCombine.PriceModel = PriceModel;
                 return ProductCombine;
             }

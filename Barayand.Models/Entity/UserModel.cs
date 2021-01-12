@@ -41,5 +41,7 @@ namespace Barayand.Models.Entity
         public List<int> Permissions { get; set; } = new List<int>();
         [NotMapped]
         public string surename { get { return this.U_Name + " " + this.U_Family; } }
+        [NotMapped]
+        public List<AddressModel> UserAdresses { get; set; } = new List<AddressModel>();
     }
 }
