@@ -4,9 +4,10 @@ using Barayand.Models.Entity;
 using Barayand.OutModels.Miscellaneous;
 using Barayand.OutModels.Models;
 using Barayand.OutModels.Response;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
+
 using System.Linq;
 using System.Threading.Tasks;
 

@@ -14,5 +14,6 @@ namespace Barayand.DAL.Interfaces
         //Task<PriceModel> CalculateBookPrice(int pid,string lang);
         Task<ProductCombineModel> CalculateProductPrice(int pid,int EndLevelCatId = 0);
         Task<ProductCombinePriceModel> CalculateProductCombinePrice(int cid,int EndLevelCatId = 0);
+        Task<bool> checkProductCombineExistsDiscount(int cid,int EndLevelCatId = 0);
     }
 }

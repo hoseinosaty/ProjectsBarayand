@@ -15,5 +15,7 @@ namespace Barayand.OutModels.Models
         public bool C_Status { get; set; } = true;
         public string Lang { get; set; } = "fa";
         public string C_ImageUrl { get; set; } = "moimage.png";
+        public string C_FileUrl { get; set; } = "noimage.png";
+
     }
 }

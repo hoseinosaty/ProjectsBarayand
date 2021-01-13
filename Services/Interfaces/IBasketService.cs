@@ -12,6 +12,8 @@ namespace Barayand.Services.Interfaces
     public interface IBasketService
     {
         Task<ResponseStructure> AddToCart(Microsoft.AspNetCore.Http.HttpRequest httpRequest, Microsoft.AspNetCore.Http.HttpResponse httpResponse);
+        Task<ResponseStructure> IncreaseProductCount(Microsoft.AspNetCore.Http.HttpRequest httpRequest, Microsoft.AspNetCore.Http.HttpResponse httpResponse);
+        Task<ResponseStructure> DecreaseProductCount(Microsoft.AspNetCore.Http.HttpRequest httpRequest, Microsoft.AspNetCore.Http.HttpResponse httpResponse);
         Task<ResponseStructure> RemoveCartItem(Microsoft.AspNetCore.Http.HttpRequest httpRequest, Microsoft.AspNetCore.Http.HttpResponse httpResponse);
         Task<ResponseStructure> FreeUpCart(Microsoft.AspNetCore.Http.HttpRequest httpRequest, Microsoft.AspNetCore.Http.HttpResponse httpResponse);
         Task<ResponseStructure> UseCoppon(Microsoft.AspNetCore.Http.HttpRequest httpRequest, Microsoft.AspNetCore.Http.HttpResponse httpResponse);

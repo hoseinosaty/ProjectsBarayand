@@ -196,6 +196,56 @@ namespace Barayand.DAL.Repositories
                 return ProductCombine;
             }
         }
+
+        public async Task<bool> checkProductCombineExistsDiscount(int cid, int EndLevelCatId = 0)
+        {
+            try
+            {
+                ProductCombinePriceModel PriceModel = new ProductCombinePriceModel();
+                var existsCombine = await _combinerepo.GetById(cid);
+                if (existsCombine != null)
+                {
+                    List<FestivalOfferModel> AllFestivalRepo = ((List<FestivalOfferModel>)(await _festrepo.GetAll()).Data);
+                    var existsInBox = await _boxProdRepository.CheckProductCombineExistsInBox(existsCombine.X_ProductId, existsCombine.X_WarrantyId, existsCombine.X_ColorId);
+                    if (existsInBox != null)
+                    {
+                        var defaultCombine = existsCombine;
+
+                        PriceModel.Price = defaultCombine.X_Price;
+                        if (existsInBox.X_SectionId == 34 && (DateTime.Now >= existsInBox.X_StartDate && DateTime.Now <= existsInBox.X_EndDate))//is special sale and timer started
+                        {
+                            if (existsInBox.X_DiscountedPrice > 0)//has discount
+                            {
+                                return true;
+                            }
+                        }
+
+                        if (existsInBox.X_SectionId != 34)
+                        {
+                            if (existsInBox.X_DiscountedPrice > 0)//has discount
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                    else if (AllFestivalRepo.Count(x => x.F_Type == 1 && x.F_Status) > 0)
+                    {
+                        return true;
+                    }
+                    else if (EndLevelCatId != 0 && AllFestivalRepo.Count(x => x.F_Type == 2 && x.F_Status && x.F_EndLevelCategoryId == EndLevelCatId) > 0)
+                    {
+                        return true;
+                    }
+
+                }
+                return false;
+            }
+            catch(Exception ex)
+            {
+                return true;
+            }
+        }
+
         private async Task<ProductCombineModel> CalculateDefaultCombine(int pid,decimal discount = 0)
         {
             ProductCombineModel ProductCombine = new ProductCombineModel();
