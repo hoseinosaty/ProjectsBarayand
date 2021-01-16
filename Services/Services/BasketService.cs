@@ -228,7 +228,7 @@ namespace Barayand.Services.Services
                                 }
                                 else//item is product manual
                                 {
-                                    var manual = await _productmanualrepo.GetById(item.ProductManualId);
+                                    var manual = await _productmanualrepo.GetById(item.ProductCombineId);
                                     if(manual != null)
                                     {
                                         var product = await _productrepo.GetById(manual.M_ProductId);
