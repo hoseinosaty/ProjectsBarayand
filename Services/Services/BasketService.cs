@@ -189,6 +189,8 @@ namespace Barayand.Services.Services
                         FullPropertyBasketModel BasketModel = new FullPropertyBasketModel();
                         var basketInfo = Barayand.Common.Services.CryptoJsService.DecryptStringAES(cookie);
                         BasketModel = JsonConvert.DeserializeObject<FullPropertyBasketModel>(basketInfo);
+                        decimal SumWithDiscount = 0;
+                        decimal SumWithOutDiscount = 0;
                         if (BasketModel.CartItems.Count() > 0)
                         {
                             List<ProductList> productLists = new List<ProductList>();
@@ -213,11 +215,17 @@ namespace Barayand.Services.Services
                                             if(priceModel.HasDiscount)
                                             {
                                                 productList.Total = (productList.DiscountedPrice * item.Quantity);
+                                                SumWithDiscount += productList.Total;
                                             }
                                             else
                                             {
                                                 productList.Total = (productList.Price * item.Quantity);
+                                                if(!await _priceCalculator.checkProductCombineExistsDiscount(item.ProductCombineId, product.P_EndLevelCatId))
+                                                {
+                                                    SumWithOutDiscount += productList.Total;
+                                                }
                                             }
+                                            
                                             productList.ColorTitle = productcomine.ColorDetail.C_Title;
                                             productList.WarrantyTitle = productcomine.WarrantyModel.W_Title;
                                             productList.GiftProduct = product.Gift;
@@ -254,21 +262,28 @@ namespace Barayand.Services.Services
                             if(BasketModel.Coppon.Count() > 0)
                             {
                                 var c = BasketModel.Coppon.FirstOrDefault();
-                                decimal SumTotal = 0;
-                                basketView.Products.ForEach(async item =>{
-                                    var cmb = await _productcombinerepo.GetById(item.ProductCombineId);
-                                    var prd = await _productrepo.GetById(cmb.X_ProductId);
-                                    if(!await _priceCalculator.checkProductCombineExistsDiscount(item.ProductCombineId,prd.P_EndLevelCatId))
-                                    {
-                                        SumTotal += item.Total;
-                                    }
-                                });
-                                var coupunAmount = (SumTotal != 0) ? (SumTotal * c.CP_Discount) / 100 : 0;
+                                if(SumWithOutDiscount > 0)
+                                {
+                                    var clc = (SumWithOutDiscount - c.CP_Discount);
+                                    clc = clc < 0 ? 0 : clc;
+                                    BasketModel.Total = clc + SumWithDiscount;
+                                }
+                                else
+                                {
+                                    BasketModel.Total = SumWithDiscount;
+                                }
+                                var coupunAmount = c.CP_Discount;
                                 basketView.CouponInfo = new Coupon() {CouponAmount = coupunAmount,CouponDiscount = c.CP_Discount,CouponId = c.CP_Code };
                             }
+                            else
+                            {
+                                BasketModel.Total = SumWithDiscount + SumWithOutDiscount;
+                            }
+                            basketView.Total = BasketModel.Total;
                         }
                     }
                 }
+                
                 return basketView;
             }
             catch (Exception ex)
@@ -413,9 +428,43 @@ namespace Barayand.Services.Services
                 return ResponseModel.ServerInternalError(data: ex);
             }
         }
-        public Task<ResponseStructure> TestCheckout(HttpRequest httpRequest, HttpResponse httpResponse, int type = 1)
+        public async Task<ResponseStructure> TestCheckout(HttpRequest httpRequest, HttpResponse httpResponse, int type = 1,bool RequestedPOS = false)
         {
-            throw new NotImplementedException();
+            try
+            {
+                FullPropertyBasketModel BasketModel = new FullPropertyBasketModel();
+                string cookie;
+                if (httpRequest.Cookies.TryGetValue("Cart", out cookie))
+                {
+                    if(cookie != null)
+                    {
+                        var basketInfo = Barayand.Common.Services.CryptoJsService.DecryptStringAES(cookie);
+                        BasketModel = JsonConvert.DeserializeObject<FullPropertyBasketModel>(basketInfo);
+                        if(BasketModel.CartItems.Count() > 0)
+                        {
+                            BasketViewModel basketView = await GetBasketItems(httpRequest);
+                            InvoiceModel Invoice = new InvoiceModel();
+                            Invoice.I_BoxWrapperId = BasketModel.GiftBoxWrapperId;
+                            Invoice.I_CopponDiscount = (BasketModel.Coppon.Count() > 0) ? BasketModel.Coppon.Sum(x=>x.CP_Discount) : 0;
+                            Invoice.I_CopponId = (BasketModel.Coppon.Count() > 0) ? BasketModel.Coppon.FirstOrDefault().CP_Id : 0;
+                            Invoice.I_DeliveryDate = BasketModel.RecipientInfo.DeliveryDate;
+                            Invoice.I_PaymentDate = DateTime.Now;
+                            Invoice.I_PaymentInfo = "Test payment";
+                            Invoice.I_PaymentType = type;
+                            Invoice.I_RecipientInfo = JsonConvert.SerializeObject(BasketModel.RecipientInfo);
+                            Invoice.I_RequestedPOS = RequestedPOS;
+                            Invoice.I_Status = 2;
+                            Invoice.I_TotalProductAmount = basketView.Products.Sum(x=>x.Total);
+                            Invoice.I_TotalAmount = basketView.Total;
+                        }
+                    }
+                }
+                return ResponseModel.Success();
+            }
+            catch(Exception ex)
+            {
+                return ResponseModel.ServerInternalError(data:ex);
+            }
         }
 
         public async Task<ResponseStructure> IncreaseProductCount(HttpRequest httpRequest, HttpResponse httpResponse)

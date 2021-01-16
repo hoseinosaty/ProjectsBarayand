@@ -11,6 +11,7 @@ namespace Barayand.OutModels.Miscellaneous
         public List<ProductList> Products { get; set; } = new List<ProductList>();
         public ReciptientInfoModel ReciptientInfo { get; set; } = new ReciptientInfoModel();
         public Coupon CouponInfo { get; set; } = null;
+        public decimal Total { get; set; } = 0;
     }
     public class ProductList
     {

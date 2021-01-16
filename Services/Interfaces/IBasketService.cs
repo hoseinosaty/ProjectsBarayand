@@ -19,6 +19,6 @@ namespace Barayand.Services.Interfaces
         Task<ResponseStructure> UseCoppon(Microsoft.AspNetCore.Http.HttpRequest httpRequest, Microsoft.AspNetCore.Http.HttpResponse httpResponse);
         Task<ResponseStructure> SaveReciptientInfo(Microsoft.AspNetCore.Http.HttpRequest httpRequest, Microsoft.AspNetCore.Http.HttpResponse httpResponse);
         Task<BasketViewModel> GetBasketItems(Microsoft.AspNetCore.Http.HttpRequest httpRequest);
-        Task<ResponseStructure> TestCheckout(Microsoft.AspNetCore.Http.HttpRequest httpRequest, Microsoft.AspNetCore.Http.HttpResponse httpResponse, int type = 1);
+        Task<ResponseStructure> TestCheckout(Microsoft.AspNetCore.Http.HttpRequest httpRequest, Microsoft.AspNetCore.Http.HttpResponse httpResponse, int type = 1, bool RequestedPOS = false);
     }
 }

@@ -14,5 +14,6 @@ namespace Barayand.OutModels.Miscellaneous
         public ReciptientInfoModel RecipientInfo { get; set; }
         public int GiftBoxWrapperId { get; set; } = 0;
         public DateTime OrderDate { get; set; } = DateTime.Now;
+        public decimal Total { get; set; } = 0;
     }
 }
